@@ -10,9 +10,9 @@
     <Grid>
         <Expander Header="Общие параметры" Margin="0,0,0,7">
             <StackPanel Margin="2,0">
-                <Controls:PropertyField Target="{Binding className}" Header="Имя класса" Value="{Binding value}" Datatype="String" Error="{Binding error}"/>
-                <Controls:PropertyField Target="{Binding parent}" Header="Родитель" Value="{Binding value.item}" Datatype="Enumerable"/>
-                <Controls:PropertyField Target="{Binding isAbstract}" Header="Абстрактный класс" Value="{Binding value}" Datatype="Boolean"/>
+                <Controls:PropertyField Target="{Binding className}" Header="Имя класса" Datatype="String"/>
+                <Controls:PropertyField Target="{Binding parent}" Header="Родитель" Datatype="Enumerable"/>
+                <Controls:PropertyField Target="{Binding isAbstract}" Header="Абстрактный класс" Datatype="Boolean"/>
             </StackPanel>
         </Expander>
     </Grid>

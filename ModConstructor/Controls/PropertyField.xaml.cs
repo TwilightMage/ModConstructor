@@ -75,21 +75,6 @@ namespace ModConstructor.Controls
             Matrix
         }
 
-        public string Error
-        {
-            get => (String)GetValue(ErrorProperty);
-            set => SetValue(ErrorProperty, value);
-        }
-        public static readonly DependencyProperty ErrorProperty = DependencyProperty.Register(nameof(Error), typeof(string), typeof(PropertyField), new PropertyMetadata("", ErrorChanged));
-
-        public static void ErrorChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            PropertyField pf = sender as PropertyField;
-            string value = e.NewValue as string;
-            pf.ErrorIndicator.Visibility = string.IsNullOrWhiteSpace(value) ? Visibility.Collapsed : Visibility.Visible;
-        }
-
-
         public string Header
         {
             get => (String)GetValue(HeaderProperty);
@@ -111,22 +96,26 @@ namespace ModConstructor.Controls
             if (e.OldValue != null)
             {
                 IProperty prop = e.OldValue as IProperty;
-                BindingOperations.ClearBinding(s, ErrorProperty);
+                prop.PropertyChanged -= s.TargetPropertyChanged;
             }
             if (e.NewValue != null)
             {
                 IProperty prop = e.NewValue as IProperty;
-                s.SetBinding(ErrorProperty, "Target.error");
+                prop.PropertyChanged += s.TargetPropertyChanged;
             }
         }
 
-        public object Value
+        private void TargetPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            get => GetValue(ValueProperty);
-            set => SetValue(ValueProperty, value);
+            IProperty prop = sender as IProperty;
+            switch (e.PropertyName)
+            {
+                case "error":
+                    ErrorIndicator.ToolTip = prop.error;
+                    ErrorIndicator.Visibility = String.IsNullOrWhiteSpace(prop.error) ? Visibility.Collapsed : Visibility.Visible;
+                    break;
+            }
         }
-        public static readonly DependencyProperty ValueProperty = DependencyProperty.Register(nameof(Value), typeof(object), typeof(PropertyField), new FrameworkPropertyMetadata(null));
-
 
         public DataType Datatype
         {

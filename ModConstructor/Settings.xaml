@@ -28,7 +28,7 @@
                     <Label x:Name="title" Content="Настройки" Foreground="#FFC8C8C8"/>
                 </DockPanel>
                 <StackPanel Grid.IsSharedSizeScope="True" DockPanel.Dock="Top" Margin="7">
-                    <Controls:PropertyField Header="Цвет приложения" Value="{DynamicResource AppColor}" Datatype="Collor" Error="{Binding error}"/>
+                    <Controls:PropertyField Header="Цвет приложения" Datatype="Collor"/>
                 </StackPanel>
                 <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" DockPanel.Dock="Bottom" Margin="7">
                     <Button Content="Закрыть" Click="Close"/>

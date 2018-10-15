@@ -19,19 +19,20 @@ namespace ModConstructor.ModClasses
 
         public static string[] presets = new string[]
         {
-            "Общий",                    // 0
-            "Оружие ближнего боя",      // 1
-            "Магическое оружие",        // 2
-            "Стрелковое оружие",        // 3
-            "Боеприпас",                // 4
-            "Метательное оружие",       // 5
-            "Оружие призыва",           // 6
-            "Установка турели",         // 7
-            "Броня",                    // 8
-            "Аксессуар",                // 9
-            "Инструмент",               // 10
-            "Потребляемый",             // 11
-            "Блок"                      // 12
+            "Свой",                     // 0
+            "Ингридиент",               // 1
+            "Оружие ближнего боя",      // 2
+            "Магическое оружие",        // 3
+            "Стрелковое оружие",        // 4
+            "Боеприпас",                // 5
+            "Метательное оружие",       // 6
+            "Оружие призыва",           // 7
+            "Установка турели",         // 8
+            "Броня",                    // 9
+            "Аксессуар",                // 10
+            "Инструмент",               // 11
+            "Потребляемый",             // 12
+            "Блок"                      // 13
         };
 
         public static string[] rarity = new string[]
@@ -53,7 +54,7 @@ namespace ModConstructor.ModClasses
             "Янтарный (квестовый)"
         };
 
-        public Property<EnumerableValue>        preset      { get; } = new Property<EnumerableValue>(       nameof(preset),      typeof(Item), () => new EnumerableValue(nameof(preset)),                (prop) => new string[] { }, true);
+        public Property<EnumerableValue>        preset      { get; } = new Property<EnumerableValue>(       nameof(preset),      typeof(Item), () => new EnumerableValue(nameof(preset), 1),             (prop) => new string[] { }, true);
         public Property<GeneralValue>           ammo        { get; } = new Property<GeneralValue>(          nameof(ammo),        typeof(Item), () => new GeneralValue(GeneralValue.ChildOf(item, true)), (prop) => new string[] { }, true);
         public Property<GeneralValue>           block       { get; } = new Property<GeneralValue>(          nameof(block),       typeof(Item), () => new GeneralValue(GeneralValue.ChildOf(item, true)), (prop) => new string[] { }, true);
 

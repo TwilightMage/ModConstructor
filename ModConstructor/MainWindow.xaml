@@ -57,15 +57,15 @@
                         <TabItem Header="Общее">
                             <ScrollViewer Padding="0,0,6,0" VerticalScrollBarVisibility="Auto">
                                 <StackPanel Background="{x:Null}" Grid.IsSharedSizeScope="True">
-                                    <Controls:PropertyField Header="Авторы" Target="{Binding authors}" Value="{Binding list, Mode=OneWay}" Datatype="String" Datamap="list"/>
-                                    <Controls:PropertyField Header="Версия" Target="{Binding version}" Value="{Binding value}" Datatype="String" IsEnabled="False"/>
-                                    <Controls:PropertyField Header="Отображаемое имя" Target="{Binding displayName}" Value="{Binding value}" Datatype="String"/>
-                                    <Controls:PropertyField Header="Домашняя страница" Target="{Binding homePage}" Value="{Binding value}" Datatype="String"/>
-                                    <Controls:PropertyField Header="Описание" Target="{Binding description}" Value="{Binding value}" Datatype="String"/>
-                                    <Controls:PropertyField Header="Скрыть код" Target="{Binding hideCode}" Value="{Binding value}" Datatype="Boolean"/>
-                                    <Controls:PropertyField Header="Скрыть ресурсы" Target="{Binding hideResources}" Value="{Binding value}" Datatype="Boolean"/>
-                                    <Controls:PropertyField Header="Добавить исходники" Target="{Binding includeSource}" Value="{Binding value}" Datatype="Boolean"/>
-                                    <Controls:PropertyField Header="Игнорировать при сборке" Target="{Binding buildIgnores}" Value="{Binding list, Mode=OneWay}" Datatype="String" Datamap="list"/>
+                                    <Controls:PropertyField Header="Авторы" Target="{Binding authors}"  Datatype="String" Datamap="list"/>
+                                    <Controls:PropertyField Header="Версия" Target="{Binding version}" Datatype="String" IsEnabled="False"/>
+                                    <Controls:PropertyField Header="Отображаемое имя" Target="{Binding displayName}" Datatype="String"/>
+                                    <Controls:PropertyField Header="Домашняя страница" Target="{Binding homePage}" Datatype="String"/>
+                                    <Controls:PropertyField Header="Описание" Target="{Binding description}" Datatype="String"/>
+                                    <Controls:PropertyField Header="Скрыть код" Target="{Binding hideCode}" Datatype="Boolean"/>
+                                    <Controls:PropertyField Header="Скрыть ресурсы" Target="{Binding hideResources}" Datatype="Boolean"/>
+                                    <Controls:PropertyField Header="Добавить исходники" Target="{Binding includeSource}" Datatype="Boolean"/>
+                                    <Controls:PropertyField Header="Игнорировать при сборке" Target="{Binding buildIgnores}" Datatype="String" Datamap="list"/>
                                 </StackPanel>
                             </ScrollViewer>
                         </TabItem>

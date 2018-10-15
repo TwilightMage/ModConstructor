@@ -28,39 +28,42 @@
             </DataTrigger>
 
             <DataTrigger Binding="{Binding preset.value.value}" Value="1">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Melee.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Ingridient.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="2">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Magic.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Melee.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="3">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Ranged.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Magic.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="4">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Ammo.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Ranged.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="5">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Throwing.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Ammo.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="6">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Summon.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Throwing.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="7">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Turret.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Summon.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="8">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Armor.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Turret.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="9">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Accessory.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Armor.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="10">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Tool.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Accessory.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="11">
-                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Consumable.png"/>
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Tool.png"/>
             </DataTrigger>
             <DataTrigger Binding="{Binding preset.value.value}" Value="12">
+                <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Consumable.png"/>
+            </DataTrigger>
+            <DataTrigger Binding="{Binding preset.value.value}" Value="13">
                 <Setter TargetName="preset" Property="Source" Value="/Resources/ItemPresets/Block.png"/>
             </DataTrigger>
         </DataTemplate.Triggers>

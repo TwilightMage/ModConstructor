@@ -120,7 +120,7 @@
         <interactivity:Interaction.Behaviors>
             <Controls:PropertySplitterBehaviour/>
         </interactivity:Interaction.Behaviors>
-        <Border x:Name="ErrorIndicator" Background="Transparent" BorderBrush="#FFFF2244" BorderThickness="2,0,0,0" Margin="0,2" ToolTip="{Binding Error, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" Visibility="Collapsed"/>
+        <Border x:Name="ErrorIndicator" Background="Transparent" BorderBrush="#FFFF2244" BorderThickness="2,0,0,0" Margin="0,2" Visibility="Collapsed"/>
         <TextBlock x:Name="Name" Text="{Binding Header}" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{StaticResource Text}" Padding="5" TextWrapping="Wrap" FlowDirection="RightToLeft"/>
         <GridSplitter x:Name="Splitter" Grid.Column="2" Width="3" Background="{StaticResource Border}" ResizeBehavior="PreviousAndNext" Margin="3,0,6,0"/>
         <Grid Grid.Column="3">

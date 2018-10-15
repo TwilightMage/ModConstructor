@@ -320,6 +320,9 @@
     <Content Include="Resources\ItemPresets\Common.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Resources\ItemPresets\Ingridient.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Resources\ItemPresets\Consumable.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -223,6 +223,16 @@ namespace ModConstructor.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Ingridient {
+            get {
+                object obj = ResourceManager.GetObject("Ingridient", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Magic {
             get {
                 object obj = ResourceManager.GetObject("Magic", resourceCulture);
