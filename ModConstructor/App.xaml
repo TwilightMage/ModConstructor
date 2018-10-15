@@ -1,0 +1,23 @@
+﻿<Application x:Class="ModConstructor.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Dictionaries/Basic.xaml"/>
+                <ResourceDictionary Source="Dictionaries/ComboBox.xaml"/>
+                <ResourceDictionary Source="Dictionaries/Converter.xaml"/>
+                <ResourceDictionary Source="Dictionaries/Datatemplates.xaml"/>
+                <ResourceDictionary Source="Dictionaries/List.xaml"/>
+                <ResourceDictionary Source="Dictionaries/Palete.xaml"/>
+                <ResourceDictionary Source="Dictionaries/ScrollBar.xaml"/>
+                <ResourceDictionary Source="Dictionaries/Tabs.xaml"/>
+                <ResourceDictionary Source="Dictionaries/Window.xaml"/>
+                <ResourceDictionary Source="Dictionaries/XCTK.xaml"/>
+                <ResourceDictionary Source="Dictionaries/DataGrid.xaml"/>
+                <ResourceDictionary Source="Dictionaries/Expander.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

@@ -1,0 +1,130 @@
+﻿<UserControl x:Class="ModConstructor.Controls.PropertyField"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:Controls="clr-namespace:ModConstructor.Controls"
+             xmlns:Advanced="http://schemas.xceed.com/wpf/xaml/toolkit"
+             xmlns:interactivity="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             mc:Ignorable="d" 
+             d:DesignWidth="500">
+    <UserControl.Resources>
+        <ControlTemplate x:Key="PropertyMap_Single" TargetType="{x:Type Controls:PropertyMap}">
+            <Controls:PropertyInput Template="{TemplateBinding InputTemplate}" DataContext="{Binding value}"/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyMap_List" TargetType="{x:Type Controls:PropertyMap}">
+            <StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Label Foreground="White" ContentStringFormat="Элементов: {0}" VerticalAlignment="Center" Grid.Column="0" Margin="0,0,6,0" Content="{Binding list.Count}"/>
+                    <Button x:Name="add" Style="{StaticResource Link}" Content="добавить" Grid.Column="1" Click="AddClick" Margin="0,0,6,0"/>
+                    <Button x:Name="clear" Style="{StaticResource Link}" Content="очистить" Grid.Column="2" Click="ClearClick"/>
+                </Grid>
+                <Grid x:Name="list">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Border Grid.Column="0" BorderBrush="{StaticResource Border}" BorderThickness="1,1,0,1" Width="5"/>
+                    <Border Grid.Column="1" BorderBrush="{StaticResource Border}" BorderThickness="1" Margin="2,0,0,0">
+                        <ScrollViewer MaxHeight="150" Padding="2,1" VerticalScrollBarVisibility="Auto">
+                            <ListBox ItemsSource="{Binding}" Grid.IsSharedSizeScope="True">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid Margin="0,1">
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition SharedSizeGroup="index" Width="auto"/>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Controls:PropertyInput Grid.Column="1" Template="{Binding InputTemplate, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:PropertyMap}}}"/>
+                                            <Button Grid.Column="2" Content="Удалить" Margin="2,0,0,0" VerticalAlignment="Center" Click="RemoveClick" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:PropertyMap}}}"/>
+                                        </Grid>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+                        </ScrollViewer>
+                    </Border>
+                </Grid>
+            </StackPanel>
+            <ControlTemplate.Triggers>
+                <DataTrigger Binding="{Binding list.Count}" Value="0">
+                    <Setter TargetName="list" Property="Visibility" Value="Collapsed"/>
+                </DataTrigger>
+            </ControlTemplate.Triggers>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_String" TargetType="{x:Type Controls:PropertyInput}">
+            <TextBox Text="{Binding value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center" TextWrapping="Wrap" AcceptsReturn="{Binding big}" AcceptsTab="{Binding big}"/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_StringLocalizable" TargetType="{x:Type Controls:PropertyInput}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Style="{StaticResource Link}" VerticalAlignment="Center" Content="🌐" Cursor="Hand" Click="OpenLocalizator"/>
+                <TextBlock Grid.Column="1" Margin="7,0,0,0" Text="{Binding localized}" HorizontalAlignment="Stretch" VerticalAlignment="Center" TextWrapping="Wrap"/>
+            </Grid>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_Boolean" TargetType="{x:Type Controls:PropertyInput}">
+            <CheckBox IsChecked="{Binding value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_Enumerable" TargetType="{x:Type Controls:PropertyInput}">
+            <ComboBox SelectedIndex="{Binding value, UpdateSourceTrigger=PropertyChanged}" SelectedItem="{Binding item, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding items}" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_Color" TargetType="{x:Type Controls:PropertyInput}">
+            <Border Background="{Binding value}" BorderThickness="1" BorderBrush="{StaticResource Border}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_Integer" TargetType="{x:Type Controls:PropertyInput}">
+            <Advanced:IntegerUpDown Value="{Binding value, UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Stretch" VerticalAlignment="Center" VerticalContentAlignment="Center"/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_Code" TargetType="{x:Type Controls:PropertyInput}">
+            <Controls:CodeInput/>
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="PropertyInput_Money" TargetType="{x:Type Controls:PropertyInput}">
+            <StackPanel Orientation="Horizontal">
+                <Image VerticalAlignment="Center" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="/Resources/Coins/Copper.gif"/>
+                <Advanced:IntegerUpDown Minimum="-1" Maximum="100" Width="50" VerticalAlignment="Center" Margin="2,0,0,0" Value="{Binding copper}"/>
+                <Image VerticalAlignment="Center" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="/Resources/Coins/Silver.gif" Margin="7,0,0,0"/>
+                <Advanced:IntegerUpDown Minimum="-1" Maximum="100" Width="50" VerticalAlignment="Center" Margin="2,0,0,0" Value="{Binding silver}"/>
+                <Image VerticalAlignment="Center" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="/Resources/Coins/Golden.gif" Margin="7,0,0,0"/>
+                <Advanced:IntegerUpDown Minimum="-1" Maximum="100" Width="50" VerticalAlignment="Center" Margin="2,0,0,0" Value="{Binding golden}"/>
+                <Image VerticalAlignment="Center" Stretch="None" RenderOptions.BitmapScalingMode="NearestNeighbor" Source="/Resources/Coins/Platinum.gif" Margin="7,0,0,0"/>
+                <Advanced:IntegerUpDown Minimum="0" Maximum="100" Width="50" VerticalAlignment="Center" Margin="2,0,0,0" Value="{Binding platinum}"/>
+                <Label Content="="/>
+                <Advanced:IntegerUpDown Minimum="0" Maximum="101010100" VerticalAlignment="Center" Width="100" Value="{Binding value}"/>
+            </StackPanel>
+        </ControlTemplate>
+    </UserControl.Resources>
+    <Grid x:Name="Container" DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Controls:PropertyField}}}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="10"/>
+            <ColumnDefinition Width="150" MinWidth="150" SharedSizeGroup="Name"/>
+            <ColumnDefinition Width="3"/>
+            <ColumnDefinition Width="*" MinWidth="150"/>
+        </Grid.ColumnDefinitions>
+        <interactivity:Interaction.Behaviors>
+            <Controls:PropertySplitterBehaviour/>
+        </interactivity:Interaction.Behaviors>
+        <Border x:Name="ErrorIndicator" Background="Transparent" BorderBrush="#FFFF2244" BorderThickness="2,0,0,0" Margin="0,2" ToolTip="{Binding Error, RelativeSource={RelativeSource TemplatedParent}, Mode=OneWay}" Visibility="Collapsed"/>
+        <TextBlock x:Name="Name" Text="{Binding Header}" Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{StaticResource Text}" Padding="5" TextWrapping="Wrap" FlowDirection="RightToLeft"/>
+        <GridSplitter x:Name="Splitter" Grid.Column="2" Width="3" Background="{StaticResource Border}" ResizeBehavior="PreviousAndNext" Margin="3,0,6,0"/>
+        <Grid Grid.Column="3">
+            <Controls:PropertyMap DataContext="{Binding Target}" x:Name="Input" Template="{StaticResource PropertyMap_Single}" InputTemplate="{StaticResource PropertyInput_String}"/>
+        </Grid>
+    </Grid>
+</UserControl>

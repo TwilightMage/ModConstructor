@@ -1,0 +1,50 @@
+﻿<Window x:Class="ModConstructor.CreateMod"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ModConstructor"
+        xmlns:Controls="clr-namespace:ModConstructor.Controls"
+        mc:Ignorable="d"
+        Title="Создать мод"
+        ResizeMode="NoResize"
+        Width="500"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="{x:Null}"
+        SizeToContent="Height"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner" DataContext="{Binding info, RelativeSource={RelativeSource Self}}">
+    <Grid VerticalAlignment="Top">
+        <Border x:Name="OuterGlow" Margin="7" BorderThickness="7" BorderBrush="{StaticResource AppColor}">
+            <Border.Effect>
+                <BlurEffect KernelType="Gaussian" Radius="8" RenderingBias="Quality" />
+            </Border.Effect>
+        </Border>
+        <Border x:Name="OuterBorder" Background="{StaticResource Background}" BorderBrush="{StaticResource AppColor}" BorderThickness="1" Margin="7" VerticalAlignment="Top">
+            <DockPanel LastChildFill="False" VerticalAlignment="Top">
+                <DockPanel x:Name="Header" Height="26" MouseLeftButtonDown="Header_MouseLeftButtonDown" DockPanel.Dock="Top">
+                    <Path Style="{StaticResource Icon}" x:Name="icon"/>
+                    <Button x:Name="exit" Style="{StaticResource HeaderControlClose}" ToolTip="Закрыть" Width="34" Background="Transparent" BorderBrush="{x:Null}" Foreground="{x:Null}" BorderThickness="0" Click="Cancel" DockPanel.Dock="Right"/>
+                    <Label x:Name="title" Content="Создание нового мода" Foreground="#FFC8C8C8"/>
+                </DockPanel>
+                <StackPanel Grid.IsSharedSizeScope="True" DockPanel.Dock="Bottom" Margin="7">
+                    <Controls:PropertyField Header="Название мода" DataContext="{Binding modName}" Value="{Binding value.value}" Datatype="String" Error="{Binding error}"/>
+                    <Controls:PropertyField Header="Отображаемое имя" DataContext="{Binding displayName}" Value="{Binding value.value}" Datatype="String"/>
+                    <Controls:PropertyField Header="Домашняя страница" DataContext="{Binding homePage}" Value="{Binding value.value}" Datatype="String"/>
+                    <Controls:PropertyField Header="Описание" DataContext="{Binding description}" Value="{Binding value.value}" Datatype="String"/>
+                    <Controls:PropertyField Header="Авторы" DataContext="{Binding authors}" Value="{Binding list, Mode=OneWay}" Datatype="String"/>
+                    <Grid Margin="0,2,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="auto"/>
+                            <ColumnDefinition Width="auto"/>
+                        </Grid.ColumnDefinitions>
+                        <Button Grid.Column="1" Content="Ок" Margin="0,0,2,0" Width="75" IsEnabled="{Binding acceptable}" Click="Submit"/>
+                        <Button Grid.Column="2" Content="Отмена" Width="75" Click="Cancel"/>
+                    </Grid>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

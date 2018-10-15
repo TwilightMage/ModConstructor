@@ -1,0 +1,40 @@
+// usings					usings
+// modName					mod name
+// notDedServLoadCode		nod dedicated server load code
+// dedServLoadCode			dedicated server load code
+// notDedServUnloadCode		nod dedicated server unload code
+// dedServUnloadCode		dedicated server unload code
+
+{$usings}
+
+namespace {$modName}
+{
+	public class {$modName} : Mod
+	{
+		internal static {$modName} instance;
+
+		public override void Load()
+		{
+			instance = this;
+
+			{$notDedServLoadCode}
+
+			if (Main.dedServ)
+			{
+				{$dedServLoadCode}
+			}
+		}
+
+		public override void Unload()
+		{
+			instance = null;
+
+			{$notDedServUnloadCode}
+
+			if (Main.dedServ)
+			{
+				{$dedServUnloadCode}
+			}
+		}
+	}
+}

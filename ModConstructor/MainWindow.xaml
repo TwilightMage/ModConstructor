@@ -1,0 +1,192 @@
+﻿<Window x:Class="ModConstructor.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
+        xmlns:local="clr-namespace:ModConstructor"
+        xmlns:Controls="clr-namespace:ModConstructor.Controls"
+        xmlns:Advanced="clr-namespace:Xceed.Wpf.Toolkit;assembly=Xceed.Wpf.Toolkit"
+        xmlns:System="clr-namespace:System;assembly=mscorlib"
+        xmlns:ModClasses="clr-namespace:ModConstructor.ModClasses"
+        mc:Ignorable="d"
+        Title="Mod Constructor "
+        Height="500" Width="700"
+        Background="{x:Null}"
+        BorderThickness="0"
+        MinWidth="500" MinHeight="300"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized"
+        SourceInitialized="Window_SourceInitialized"
+        StateChanged="Window_StateChanged"
+        DataContext="{Binding Mode=OneWay, RelativeSource={RelativeSource Self}}">
+    <Window.CommandBindings>
+        <CommandBinding Command="Save" Executed="Save_Executed"/>
+    </Window.CommandBindings>
+    <Grid MinWidth="100" MinHeight="100">
+        <Border x:Name="OuterGlow" Margin="7" BorderThickness="7" BorderBrush="{StaticResource AppColor}">
+            <Border.Effect>
+                <BlurEffect KernelType="Gaussian" Radius="8" RenderingBias="Quality" />
+            </Border.Effect>
+        </Border>
+        <Border x:Name="OuterBorder" Background="{StaticResource Background}" BorderBrush="{StaticResource AppColor}" BorderThickness="1" Margin="7" Cursor="Arrow">
+            <Grid>
+                <DockPanel>
+                    <DockPanel x:Name="Header" Height="26" MouseLeftButtonDown="Header_MouseLeftButtonDown" DockPanel.Dock="Top">
+                        <Path Style="{StaticResource Icon}" x:Name="icon"/>
+                        <Button Style="{StaticResource HeaderControlClose}" ToolTip="Закрыть" Width="34" Click="Exit_Click" DockPanel.Dock="Right"/>
+                        <Button x:Name="maximize" Style="{StaticResource HeaderControlMaximize}" ToolTip="Развернуть" Width="34" Click="Maximize_Click" DockPanel.Dock="Right"/>
+                        <Button Style="{StaticResource HeaderControlMinimize}" ToolTip="Свернуть" Width="34" Click="Minimize_Click" DockPanel.Dock="Right"/>
+                        <Label Content="{Binding title}"/>
+                    </DockPanel>
+                    <Menu x:Name="menu" Margin="0,2" DockPanel.Dock="Top">
+                        <MenuItem Header="Главный экран" Click="MenuHome_Click"/>
+                        <MenuItem Header="Настройки" Click="OpenSettings"/>
+                        <MenuItem Header="Добавить">
+                            <MenuItem Header="Предмет" Click="MenuAddItem_Click"/>
+                            <MenuItem Header="Объект..."/>
+                        </MenuItem>
+                    </Menu>
+                    <StatusBar DockPanel.Dock="Bottom" Margin="-1,0" Background="{StaticResource AppColor}" Foreground="{StaticResource Text}">
+                        <StatusBarItem ContentStringFormat="Ошибок: {0}" Content="{Binding Errors.Count, Mode=OneWay}"/>
+                        <StatusBarItem ContentStringFormat="Изменений: {0}" Content="{Binding Dirty.Count, Mode=OneWay}"/>
+                    </StatusBar>
+                    <TabControl x:Name="Tabs" SelectionChanged="Tabs_SelectionChanged" DockPanel.Dock="Top" Margin="7,0,7,7" DataContext="{Binding mod}" TabIndex="{Binding currentTab}">
+                        <TabItem Header="Общее">
+                            <ScrollViewer Padding="0,0,6,0" VerticalScrollBarVisibility="Auto">
+                                <StackPanel Background="{x:Null}" Grid.IsSharedSizeScope="True">
+                                    <Controls:PropertyField Header="Авторы" Target="{Binding authors}" Value="{Binding list, Mode=OneWay}" Datatype="String" Datamap="list"/>
+                                    <Controls:PropertyField Header="Версия" Target="{Binding version}" Value="{Binding value}" Datatype="String" IsEnabled="False"/>
+                                    <Controls:PropertyField Header="Отображаемое имя" Target="{Binding displayName}" Value="{Binding value}" Datatype="String"/>
+                                    <Controls:PropertyField Header="Домашняя страница" Target="{Binding homePage}" Value="{Binding value}" Datatype="String"/>
+                                    <Controls:PropertyField Header="Описание" Target="{Binding description}" Value="{Binding value}" Datatype="String"/>
+                                    <Controls:PropertyField Header="Скрыть код" Target="{Binding hideCode}" Value="{Binding value}" Datatype="Boolean"/>
+                                    <Controls:PropertyField Header="Скрыть ресурсы" Target="{Binding hideResources}" Value="{Binding value}" Datatype="Boolean"/>
+                                    <Controls:PropertyField Header="Добавить исходники" Target="{Binding includeSource}" Value="{Binding value}" Datatype="Boolean"/>
+                                    <Controls:PropertyField Header="Игнорировать при сборке" Target="{Binding buildIgnores}" Value="{Binding list, Mode=OneWay}" Datatype="String" Datamap="list"/>
+                                </StackPanel>
+                            </ScrollViewer>
+                        </TabItem>
+                        <TabItem Header="Предметы">
+                            <DockPanel>
+                                <ListView ItemContainerStyle="{StaticResource SelectableItem}" x:Name="ItemList" Width="250" ItemTemplate="{StaticResource ItemTemplate}" SelectionChanged="ItemList_SelectionChanged" HorizontalContentAlignment="Stretch" ItemsSource="{Binding items.list}" ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                                <ScrollViewer Background="{x:Null}" BorderThickness="0" HorizontalContentAlignment="Stretch" VerticalScrollBarVisibility="Auto">
+                                    <StackPanel x:Name="ItemProperties" VerticalAlignment="Top" Margin="7,0,0,0"/>
+                                </ScrollViewer>
+                            </DockPanel>
+                        </TabItem>
+                        <TabItem Header="Снаряды">
+                            <Grid/>
+                        </TabItem>
+                        <TabItem Header="Локализация" x:Name="LocalizationTab">
+                            <DockPanel>
+                                <DockPanel DockPanel.Dock="Top" Margin="0,0,0,2">
+                                    <Label Content="Отображаемый язык:"/>
+                                    <ComboBox SelectedIndex="{Binding curLang}">
+                                        <ComboBoxItem Content="Английский (En)"/>
+                                        <ComboBoxItem Content="Немецкий (De)"/>
+                                        <ComboBoxItem Content="Итальянский (It)"/>
+                                        <ComboBoxItem Content="Французский (Fr)"/>
+                                        <ComboBoxItem Content="Испанский (Es)"/>
+                                        <ComboBoxItem Content="Русский (Ru)"/>
+                                        <ComboBoxItem Content="Китайский (Ch)"/>
+                                        <ComboBoxItem Content="Бразильский (Br)"/>
+                                        <ComboBoxItem Content="Польский (Po)"/>
+                                    </ComboBox>
+                                </DockPanel>
+                                <DataGrid ItemsSource="{Binding localization}" AutoGenerateColumns="False" Foreground="{DynamicResource Text}" x:Name="localizator" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Auto" HeadersVisibility="Column" SelectionMode="Single" CanUserResizeColumns="False" CanUserReorderColumns="False" CanUserResizeRows="False" CanUserSortColumns="False">
+                                    <DataGrid.Resources>
+                                        <Style x:Key="wrap">
+                                            <Setter Property="TextBlock.TextWrapping" Value="Wrap" />
+                                        </Style>
+                                    </DataGrid.Resources>
+                                    <DataGrid.Columns>
+
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding header}" Header="Ключ" Width="2*" IsReadOnly="True"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding En}" Header="En" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding De}" Header="De" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding It}" Header="It" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Fr}" Header="Fr" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Es}" Header="Es" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Ru}" Header="Ru" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Ch}" Header="Ch" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Br}" Header="Br" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Po}" Header="Po" Width="*"/>
+
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </DockPanel>
+                        </TabItem>
+                    </TabControl>
+                </DockPanel>
+                <Grid Background="{DynamicResource Background}" Margin="0,26,0,0" Visibility="{Binding displayInit}" d:IsHidden="True">
+                    <DockPanel>
+                        <Controls:BrowsePath DockPanel.Dock="Top" Margin="6" VerticalAlignment="Top" path="{Binding modloaderPath}" pathType="Dirrectory"/>
+                        <Grid Margin="7,0,8,8">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="200"/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Button Grid.Column="0" Grid.Row="0" SnapsToDevicePixels="True" Content="Создать" Margin="0,0,1,1" Click="CreateMod_Click"/>
+                                <Button Grid.Column="1" Grid.Row="0" SnapsToDevicePixels="True" Content="Открыть" Margin="1,0,1,1" Click="OpenMod_Click" IsEnabled="{Binding canOpen}"/>
+                                <Button Grid.Column="2" Grid.Row="0" SnapsToDevicePixels="True" IsEnabled="{Binding canOpen}" Margin="1,0,1,1" Click="DeleteMod_Click">
+                                    <Path Width="15" Height="15" Stretch="Uniform" Data="M0 84V56c0-13.3 10.7-24 24-24h112l9.4-18.7c4-8.2 12.3-13.3 21.4-13.3h114.3c9.1 0 17.4 5.1 21.5 13.3L312 32h112c13.3 0 24 10.7 24 24v28c0 6.6-5.4 12-12 12H12C5.4 96 0 90.6 0 84zm416 56v324c0 26.5-21.5 48-48 48H80c-26.5 0-48-21.5-48-48V140c0-6.6 5.4-12 12-12h360c6.6 0 12 5.4 12 12zm-272 68c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208zm96 0c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208zm96 0c0-8.8-7.2-16-16-16s-16 7.2-16 16v224c0 8.8 7.2 16 16 16s16-7.2 16-16V208z" Fill="{Binding Foreground, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type Button}}}"/>
+                                </Button>
+                                <Button Grid.Column="0" Grid.Row="1" Grid.ColumnSpan="3" Content="Обновить" Margin="0,1,0,1" Click="RefreshMods_Click"/>
+                                <ListView ItemContainerStyle="{StaticResource SelectableItem}" Margin="0,1,0,0" Grid.Column="0" Grid.Row="2" Grid.ColumnSpan="3" ItemsSource="{Binding mods}" SelectedIndex="{Binding browseMod}" MouseDoubleClick="modBrowser_DoubleClick"/>
+                            </Grid>
+                            <ScrollViewer Grid.Column="1" Margin="8,0,0,0" VerticalScrollBarVisibility="Auto" Visibility="{Binding showModInfo}">
+                                <Grid VerticalAlignment="Top">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <TextBlock Grid.Column="0" Grid.Row="0" Margin="0,0,7,0" Text="Название:" Foreground="White"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="0" Margin="0,0,0,0" Text="{Binding browseModName}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="1" Margin="0,7,7,0" Text="Версия:" Foreground="White"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="1" Margin="0,7,0,0" Text="{Binding browseModVersion}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="2" Margin="0,7,7,0" Text="Авторы:" Foreground="White"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="2" Margin="0,7,0,0" Text="{Binding browseModAuthor}" Foreground="White" TextWrapping="Wrap"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="3" Margin="0,7,7,0" Text="Вебсайт:" Foreground="White"/>
+                                    <Button Grid.Column="1" Grid.Row="3" Margin="0,7,0,0" Content="{Binding browseModHomepage}" Foreground="White" Style="{StaticResource Link}" Click="Homepage_Click" ToolTip="Открыть в браузере" HorizontalAlignment="Left"/>
+                                    <TextBlock Grid.Column="0" Grid.Row="4" Margin="0,7,7,0" Text="Описание:" Foreground="White"/>
+                                    <TextBlock Grid.Column="1" Grid.Row="4" Margin="0,7,0,0" Text="{Binding browseModDescription}" Foreground="White" TextWrapping="Wrap"/>
+                                </Grid>
+                            </ScrollViewer>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+            </Grid>
+        </Border>
+        <Grid x:Name="Resize" Margin="7" Visibility="Collapsed">
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="top"                                     VerticalAlignment="Top"              Height="1" Margin="1,0,1,0" Cursor="SizeNS"   PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="bottom"                                  VerticalAlignment="Bottom"           Height="1" Margin="1,0,1,0" Cursor="SizeNS"   PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="left"        HorizontalAlignment="Left"                             Width="1"            Margin="0,1,0,1" Cursor="SizeWE"   PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="right"       HorizontalAlignment="Right"                            Width="1"            Margin="0,1,0,1" Cursor="SizeWE"   PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="bottomLeft"  HorizontalAlignment="Left"  VerticalAlignment="Bottom" Width="1" Height="1"                  Cursor="SizeNESW" PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="bottomRight" HorizontalAlignment="Right" VerticalAlignment="Bottom" Width="1" Height="1"                  Cursor="SizeNWSE" PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="topRight"    HorizontalAlignment="Right" VerticalAlignment="Top"    Width="1" Height="1"                  Cursor="SizeNESW" PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+            <Rectangle Stroke="{x:Null}" Fill="Transparent" x:Name="topLeft"     HorizontalAlignment="Left"  VerticalAlignment="Top"    Width="1" Height="1"                  Cursor="SizeNWSE" PreviewMouseDown="ResizeRectangle_PreviewMouseDown"/>
+        </Grid>
+    </Grid>
+</Window>

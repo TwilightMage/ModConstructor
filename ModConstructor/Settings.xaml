@@ -1,0 +1,39 @@
+﻿<Window x:Class="ModConstructor.Settings"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ModConstructor"
+        xmlns:Controls="clr-namespace:ModConstructor.Controls"
+        mc:Ignorable="d"
+        Title="Создать мод"
+        ResizeMode="NoResize"
+        Width="500" Height="500"
+        AllowsTransparency="True"
+        WindowStyle="None"
+        Background="{x:Null}"
+        ShowInTaskbar="False"
+        WindowStartupLocation="CenterOwner" DataContext="{Binding info, RelativeSource={RelativeSource Self}}">
+    <Grid>
+        <Border x:Name="OuterGlow" Margin="7" BorderThickness="7" BorderBrush="{StaticResource AppColor}">
+            <Border.Effect>
+                <BlurEffect KernelType="Gaussian" Radius="8" RenderingBias="Quality" />
+            </Border.Effect>
+        </Border>
+        <Border x:Name="OuterBorder" Background="{StaticResource Background}" BorderBrush="{StaticResource AppColor}" BorderThickness="1" Margin="7">
+            <DockPanel LastChildFill="False">
+                <DockPanel x:Name="Header" Height="26" MouseLeftButtonDown="Header_MouseLeftButtonDown" DockPanel.Dock="Top">
+                    <Path Style="{StaticResource Icon}" x:Name="icon"/>
+                    <Button x:Name="exit" Style="{StaticResource HeaderControlClose}" ToolTip="Закрыть" Width="34" Background="Transparent" BorderBrush="{x:Null}" Foreground="{x:Null}" BorderThickness="0" DockPanel.Dock="Right" Click="Close"/>
+                    <Label x:Name="title" Content="Настройки" Foreground="#FFC8C8C8"/>
+                </DockPanel>
+                <StackPanel Grid.IsSharedSizeScope="True" DockPanel.Dock="Top" Margin="7">
+                    <Controls:PropertyField Header="Цвет приложения" Value="{DynamicResource AppColor}" Datatype="Collor" Error="{Binding error}"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" FlowDirection="RightToLeft" DockPanel.Dock="Bottom" Margin="7">
+                    <Button Content="Закрыть" Click="Close"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+    </Grid>
+</Window>

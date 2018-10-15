@@ -1,0 +1,36 @@
+﻿<UserControl x:Class="ModConstructor.Controls.ItemComponent"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ModConstructor.Controls"
+             mc:Ignorable="d" 
+             d:DesignWidth="500">
+    <Grid VerticalAlignment="Top">
+        <Expander Header="Параметры предмета" Margin="0,0,0,7">
+            <StackPanel Margin="2,0">
+                <local:PropertyField Header="Имя предмета" Target="{Binding displayName}" Datatype="StringLocalizable" Value="{Binding value}"/>
+                <local:PropertyField Header="Описание" Target="{Binding description}" Datatype="StringLocalizable" Value="{Binding value}"/>
+                <local:PropertyField Header="Редкость" Target="{Binding rare}" Datatype="Enumerable" Value="{Binding value.item}"/>
+                <local:PropertyField Header="Размер стэка" Target="{Binding maxStack}" Datatype="Integer" Value="{Binding value}"/>
+                <local:PropertyField Header="Стоимость" Target="{Binding value}" Datatype="Money" Value="{Binding value}"/>
+                <local:PropertyField Header="Преднастройки" Target="{Binding preset}" Datatype="Enumerable" Value="{Binding value}"/>
+                <Rectangle Margin="5" Height="1" Fill="{StaticResource Border}"/>
+                <StackPanel x:Name="presets">
+                    <!--                      OID*+!=T@Q>&#-->
+                    <local:PropertyField Tag="1111110000100" Target="{Binding damage}" Value="{Binding value}" Header="Урон" Datatype="Integer"/>
+                    <local:PropertyField Tag="1000000010000" Target="{Binding defence}" Value="{Binding value}" Header="Броня" Datatype="Integer"/>
+                    <local:PropertyField Tag="1000000000100" Target="{Binding pick}" Value="{Binding value}" Header="Сила кирки" Datatype="Integer"/>
+                    <local:PropertyField Tag="1000000000100" Target="{Binding axe}" Value="{Binding value}" Header="Сила Топора" Datatype="Integer"/>
+                    <local:PropertyField Tag="1000000000100" Target="{Binding hammer}" Value="{Binding value}" Header="Сила молота" Datatype="Integer"/>
+                    <local:PropertyField Tag="1000000000010" Target="{Binding healLife}" Value="{Binding value}" Header="Восстановление жизней" Datatype="Integer"/>
+                    <local:PropertyField Tag="1000000000010" Target="{Binding healMana}" Value="{Binding value}" Header="Восстановление маны" Datatype="Integer"/>
+                    <local:PropertyField Tag="1000000001000" Target="{Binding expert}" Value="{Binding value}" Header="Эксперт-режим" Datatype="Boolean"/>
+                    <local:PropertyField Tag="1001001000000" Target="{Binding mana}" Value="{Binding value}" Header="Затраты маны" Datatype="Integer"/>
+                    <local:PropertyField Tag="1010000000000" Target="{Binding ammo}" Value="{Binding value.item}" Header="Боеприпас" Datatype="Enumerable"/>
+                    <local:PropertyField Tag="1000000000001" Target="{Binding block}" Value="{Binding value.item}" Header="Блок" Datatype="Enumerable"/>
+                </StackPanel>
+            </StackPanel>
+        </Expander>
+    </Grid>
+</UserControl>

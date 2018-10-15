@@ -1,0 +1,36 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:ModConstructor.Dictionaries">
+    <Color x:Key="MainColor" A="255" R="25" G="162" B="43"/>
+    <Color x:Key="SecondaryColor" A="255" R="18" G="121" B="32"/>
+
+    <SolidColorBrush x:Key="AppColor" Color="{DynamicResource MainColor}"/>
+
+    <SolidColorBrush x:Key="Hover" Color="Red"/>
+
+    <SolidColorBrush x:Key="Background" Color="#FF1A1A1D"/>
+    <SolidColorBrush x:Key="Border" Color="#FF2F2F37"/>
+
+    <SolidColorBrush x:Key="Text" Color="White"/>
+    <SolidColorBrush x:Key="TextDisabled" Color="#FF969696"/>
+
+    <SolidColorBrush x:Key="Control" Color="#FF212125"/>
+    <SolidColorBrush x:Key="ControlHover" Color="#FF323238"/>
+    <SolidColorBrush x:Key="ControlDisabled" Color="#FF29292E"/>
+    <SolidColorBrush x:Key="ControlInput" Color="#FF141415"/>
+    <SolidColorBrush x:Key="ControlInputDisabled" Color="#FF1F1F23"/>
+    <SolidColorBrush x:Key="ControlBorder" Color="#FF2F2F37"/>
+    <SolidColorBrush x:Key="ControlActive" Color="{DynamicResource SecondaryColor}"/>
+
+    <SolidColorBrush x:Key="Workspace" Color="#FF101011" Opacity="0.5"/>
+
+    <SolidColorBrush x:Key="ControlHightlight" Color="{DynamicResource MainColor}" Opacity="0.1"/>
+    <SolidColorBrush x:Key="ControlHightlightBorder" Color="{DynamicResource MainColor}" Opacity="0.85"/>
+    <SolidColorBrush x:Key="ControlSelected" Color="{DynamicResource MainColor}" Opacity="0.25"/>
+    <SolidColorBrush x:Key="ControlSelectedBorder" Color="{DynamicResource MainColor}" Opacity="1"/>
+
+    <SolidColorBrush x:Key="ScrollbarBrushBackground" Color="#FF3E3E42"/>
+    <SolidColorBrush x:Key="ScrollBarBrushThumb" Color="#FF686868"/>
+    <SolidColorBrush x:Key="ScrollBarBrushThumbHover" Color="#FF9E9E9E"/>
+    <SolidColorBrush x:Key="ScrollBarBrushThumbPressed" Color="#FFEFEBEF"/>
+</ResourceDictionary>
