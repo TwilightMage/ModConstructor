@@ -1,6 +1,7 @@
 ﻿using ModConstructor.ModClasses;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -102,8 +103,22 @@ namespace ModConstructor.Controls
             get => (IProperty)GetValue(TargetProperty);
             set => SetValue(TargetProperty, value);
         }
-        public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(Target), typeof(IProperty), typeof(PropertyField), new PropertyMetadata(null));
+        public static readonly DependencyProperty TargetProperty = DependencyProperty.Register(nameof(Target), typeof(IProperty), typeof(PropertyField), new PropertyMetadata(null, TargetChanged));
 
+        public static void TargetChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            PropertyField s = sender as PropertyField;
+            if (e.OldValue != null)
+            {
+                IProperty prop = e.OldValue as IProperty;
+                BindingOperations.ClearBinding(s, ErrorProperty);
+            }
+            if (e.NewValue != null)
+            {
+                IProperty prop = e.NewValue as IProperty;
+                s.SetBinding(ErrorProperty, "Target.error");
+            }
+        }
 
         public object Value
         {

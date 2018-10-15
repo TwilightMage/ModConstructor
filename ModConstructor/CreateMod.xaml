@@ -29,11 +29,11 @@
                     <Label x:Name="title" Content="Создание нового мода" Foreground="#FFC8C8C8"/>
                 </DockPanel>
                 <StackPanel Grid.IsSharedSizeScope="True" DockPanel.Dock="Bottom" Margin="7">
-                    <Controls:PropertyField Header="Название мода" DataContext="{Binding modName}" Value="{Binding value.value}" Datatype="String" Error="{Binding error}"/>
-                    <Controls:PropertyField Header="Отображаемое имя" DataContext="{Binding displayName}" Value="{Binding value.value}" Datatype="String"/>
-                    <Controls:PropertyField Header="Домашняя страница" DataContext="{Binding homePage}" Value="{Binding value.value}" Datatype="String"/>
-                    <Controls:PropertyField Header="Описание" DataContext="{Binding description}" Value="{Binding value.value}" Datatype="String"/>
-                    <Controls:PropertyField Header="Авторы" DataContext="{Binding authors}" Value="{Binding list, Mode=OneWay}" Datatype="String"/>
+                    <Controls:PropertyField Header="Название мода" Target="{Binding modName}" Datatype="String"/>
+                    <Controls:PropertyField Header="Отображаемое имя" Target="{Binding displayName}" Datatype="String"/>
+                    <Controls:PropertyField Header="Домашняя страница" Target="{Binding homePage}" Datatype="String"/>
+                    <Controls:PropertyField Header="Описание" Target="{Binding description}" Datatype="String"/>
+                    <Controls:PropertyField Header="Авторы" Target="{Binding authors}" Datatype="String"/>
                     <Grid Margin="0,2,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>
