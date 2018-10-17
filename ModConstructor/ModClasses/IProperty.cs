@@ -148,6 +148,7 @@ namespace ModConstructor.ModClasses
 
             _value = def();
             _value.PropertyChanged += UpdateNotifier;
+            error = Validate();
 
             value.PropertyChanged += UpdateNotifier;
         }
