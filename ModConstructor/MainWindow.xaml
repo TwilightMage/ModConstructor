@@ -104,7 +104,7 @@
                                     </DataGrid.Resources>
                                     <DataGrid.Columns>
 
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding header}" Header="Ключ" Width="2*" IsReadOnly="True"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding where}" Header="Ключ" Width="2*" IsReadOnly="True"/>
                                         <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding En}" Header="En" Width="*"/>
                                         <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding De}" Header="De" Width="*"/>
                                         <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding It}" Header="It" Width="*"/>

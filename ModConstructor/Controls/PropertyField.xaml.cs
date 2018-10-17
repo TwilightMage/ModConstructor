@@ -182,15 +182,15 @@ namespace ModConstructor.Controls
 
         public void OpenLocalizator(object sender, RoutedEventArgs e)
         {
-            MainWindow.instance.localizator.SelectedItem = null;
-            foreach (StringValueLocalizable.Presenter pres in MainWindow.instance.localizator.Items)
+            MainWindow.instance.localizator.SelectedItem = MainWindow.instance.mod.localization.Where(loc => loc == (sender as FrameworkElement).DataContext);
+            /*foreach (StringValueLocalizable pres in MainWindow.instance.localizator.Items)
             {
                 if (pres.owner == (sender as FrameworkElement).DataContext)
                 {
                     MainWindow.instance.localizator.SelectedItem = pres;
                     break;
                 }
-            }
+            }*/
             MainWindow.instance.Tabs.SelectedItem = MainWindow.instance.LocalizationTab;
 
         }

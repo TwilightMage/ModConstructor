@@ -12,7 +12,7 @@ using System.Xml.Linq;
 
 namespace ModConstructor.ModClasses
 {
-    public interface IProperty : IValue
+    public interface IProperty : INotifyPropertyChanged
     {
         string error { get; set; }
         bool hasError { get; }
@@ -20,10 +20,15 @@ namespace ModConstructor.ModClasses
         bool changed { get; set; }
         string shortname { get; }
         string name { get; }
+        IValue owner { get; set; }
+        string where { get; }
 
         void Remove();
         void Restore(XAttribute data);
         void Restore(XElement data);
+        XObject Pack(string name);
+        XElement PackElement(string name);
+        void Initialize(IValue owner);
     }
 
     public sealed class Property<T> : IProperty where T : IValue
@@ -32,13 +37,11 @@ namespace ModConstructor.ModClasses
         {
             public Func<T> def;
             public Func<string, T, string> validator;
-            public Func<Property<T>, string[]> where;
 
-            public PropertyData(Func<T> def, Func<string, T, string> validator, Func<Property<T>, string[]> where)
+            public PropertyData(Func<T> def, Func<string, T, string> validator)
             {
                 this.def = def;
                 this.validator = validator;
-                this.where = where;
             }
         }
 
@@ -46,16 +49,18 @@ namespace ModConstructor.ModClasses
 
         public event PropertyChangedEventHandler PropertyChanged;
 
+        public IValue owner { get; set; }
+
         public string shortname { get; }
         public string name { get; }
         public bool global { get; }
 
         public T def() => dictionary[name].def();
-        public string validator() => dictionary[name].validator?.Invoke(shortname, value) ?? "";
+        public string Validate() => dictionary[name].validator?.Invoke(shortname, value) ?? "";
         public void SetValidator(Func<string, T, string> validator) => dictionary[name].validator = validator;
-        public string[] where() => dictionary[name].where(this);
+        public string where => $"{owner.where}.{shortname}";
 
-        private string _error = "Unknown error";
+        private string _error = "";
         public string error
         {
             get => _error;
@@ -88,7 +93,17 @@ namespace ModConstructor.ModClasses
             set
             {
                 T before = _value;
+                if (_value != null)
+                {
+                    _value.Remove();
+                    _value.PropertyChanged -= UpdateNotifier;
+                }
                 _value = value;
+                if (_value != null)
+                {
+                    _value.Initialize(this);
+                    _value.PropertyChanged += UpdateNotifier;
+                }
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("value"));
                 ValueUpdated();
             }
@@ -96,7 +111,7 @@ namespace ModConstructor.ModClasses
 
         private void ValueUpdated()
         {
-            error = validator();
+            error = Validate();
             changed = !value.Equals(def());
         }
 
@@ -122,67 +137,44 @@ namespace ModConstructor.ModClasses
             }
         }
 
-        public Property(string name, Type owner, Func<T> def, Func<Property<T>, string[]> where, bool global = false, Func<string, T, string> validator = null)
+        public Property(string name, Type owner, Func<T> def, bool global = false, Func<string, T, string> validator = null)
         {
             shortname = name;
             string fullname = $"{owner.FullName}.{name}";
             this.name = fullname;
             this.global = global;
 
-            dictionary[fullname] = new PropertyData(def, validator, where);
+            dictionary[fullname] = new PropertyData(def, validator);
 
-            value = def();
+            _value = def();
+            _value.PropertyChanged += UpdateNotifier;
 
             value.PropertyChanged += UpdateNotifier;
         }
 
-        private void UpdateNotifier(object sender, PropertyChangedEventArgs e)
-        {
-            ValueUpdated();
-        }
-
-        public static implicit operator T(Property<T> property)
-        {
-            return property.value;
-        }
-
-        public override string ToString()
-        {
-            return value.ToString();
-        }
-
-        public void Reset()
-        {
-            value = def();
-        }
-
-        public XObject Pack(string name)
-        {
-            return value.Pack(shortname);
-        }
-
-        public XElement PackElement(string name)
-        {
-            return value.PackElement(name);
-        }
-
-        public void Restore(XAttribute data)
-        {
-            value.Restore(data);
-        }
-
-        public void Restore(XElement data)
-        {
-            value.Restore(data);
-        }
+        private void UpdateNotifier(object sender, PropertyChangedEventArgs e) => ValueUpdated();
+        public static implicit operator T(Property<T> property) => property.value;
+        public override string ToString() => value.ToString();
+        public XObject Pack(string name) => value.Pack(name);
+        public XElement PackElement(string name) => value.PackElement(name);
+        public void Reset() => value = def();
+        public void Restore(XAttribute data) => value.Restore(data);
+        public void Restore(XElement data) => value.Restore(data);
 
         public void Remove()
         {
+            value.Remove();
             if (global)
             {
                 MainWindow.Errors.Remove(this);
                 MainWindow.Dirty.Remove(this);
             }
+        }
+
+        public void Initialize(IValue owner)
+        {
+            this.owner = owner;
+            value.Initialize(this);
         }
     }
 
@@ -198,13 +190,11 @@ namespace ModConstructor.ModClasses
         {
             public Func<T> def;
             public Func<string, T, string> validator;
-            public Func<PropertyList<T>, string[]> where;
 
-            public PropertyData(Func<T> def, Func<string, T, string> validator, Func<PropertyList<T>, string[]> where)
+            public PropertyData(Func<T> def, Func<string, T, string> validator)
             {
                 this.def = def;
                 this.validator = validator;
-                this.where = where;
             }
         }
 
@@ -213,6 +203,8 @@ namespace ModConstructor.ModClasses
         public event PropertyChangedEventHandler PropertyChanged;
         public event NotifyCollectionChangedEventHandler CollectionChanged;
 
+        public IValue owner { get; set; }
+
         public string shortname { get; }
         public string name { get; }
         public bool global { get; }
@@ -220,7 +212,7 @@ namespace ModConstructor.ModClasses
         public T def() => dictionary[name].def();
         public string validator(int index) => dictionary[name].validator?.Invoke(shortname, list[index]) ?? "";
         public void SetValidator(Func<string, T, string> validator) => dictionary[name].validator = validator;
-        public string[] where() => dictionary[name].where(this);
+        public string where => $"{owner.where}.{shortname}";
 
         private string _error = "";
         public string error
@@ -272,14 +264,14 @@ namespace ModConstructor.ModClasses
             }
         }
 
-        public PropertyList(string name, Type owner, Func<T> def, Func<PropertyList<T>, string[]> where, bool global = false, Func<string, T, string> validator = null)
+        public PropertyList(string name, Type owner, Func<T> def, bool global = false, Func<string, T, string> validator = null)
         {
             shortname = name;
             string fullname = $"{owner.FullName}.{name}";
             this.name = fullname;
             this.global = global;
 
-            dictionary[fullname] = new PropertyData(def, validator, where);
+            dictionary[fullname] = new PropertyData(def, validator);
 
             list = new ObservableCollection<T>();
 
@@ -349,27 +341,35 @@ namespace ModConstructor.ModClasses
 
         public void Add()
         {
-            list.Add(def());
+            T val = def();
+            list.Add(val);
+            val.Initialize(this);
         }
 
         public void Add(T val)
         {
             list.Add(val);
+            val.Initialize(this);
         }
 
-        public void Fill(PropertyList<T> proplist)
+        /*public void Fill(PropertyList<T> proplist)
         {
             foreach (var item in proplist) list.Add(item);
-        }
+        }*/
 
         public void Clear()
         {
+            foreach (T val in list) val.Remove();
             list.Clear();
         }
 
         public void Delete(T val)
         {
-            list.Remove(val);
+            if (list.Contains(val))
+            {
+                val.Remove();
+                list.Remove(val);
+            }
         }
 
         public XObject Pack(string name)
@@ -395,6 +395,7 @@ namespace ModConstructor.ModClasses
                 IValue val = (IValue)Activator.CreateInstance(typeof(T));
                 val.Restore(el);
                 list.Add((T)val);
+                val.Initialize(this);
             }
         }
 
@@ -405,6 +406,11 @@ namespace ModConstructor.ModClasses
                 MainWindow.Errors.Remove(this);
                 MainWindow.Dirty.Remove(this);
             }
+        }
+
+        public void Initialize(IValue owner)
+        {
+            this.owner = owner;
         }
     }
 

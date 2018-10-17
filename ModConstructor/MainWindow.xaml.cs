@@ -21,6 +21,7 @@ using System.Windows.Interop;
 using Cursors = System.Windows.Input.Cursors;
 using Path = System.IO.Path;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
+using ModConstructor.ModClasses.Values;
 
 namespace ModConstructor
 {
@@ -268,7 +269,10 @@ namespace ModConstructor
             string path = $@"{modSourcesPath}\{name}\{name}.mtf";
             using (StreamReader sr = new StreamReader(path))
             {
-                mod = ModInfo.Parse(sr.ReadToEnd());
+                XElement data = XElement.Parse(sr.ReadToEnd());
+                mod = new ModInfo(data.Attribute("name").Value);
+                mod.Restore(data);
+                mod.Initialize(null);
                 GeneralValue.LaunchAssign();
                 browseMod = -1;
                 try

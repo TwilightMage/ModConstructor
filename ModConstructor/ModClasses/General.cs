@@ -11,15 +11,12 @@ using System.Xml.Linq;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
+using ModConstructor.ModClasses.Values;
 
 namespace ModConstructor.ModClasses
 {
-    public class General : IValue
+    public class General : ValueSolution
     {
-        public delegate void ChangeEventHandler<T>(T before, T now);
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public class NullKeyException : Exception { }
 
         protected static string GenerateIndex()
@@ -43,10 +40,10 @@ namespace ModConstructor.ModClasses
 
         public string key = GenerateIndex();
 
-        public Property<StringValue>  className  { get; } = new Property<StringValue>( nameof(className),  typeof(General), () => "NewClass",         (prop) => new string[] { }, true, PropertyValidators.ClassName);
-        public Property<GeneralValue> parent     { get; } = new Property<GeneralValue>(nameof(parent),     typeof(General), () => new GeneralValue(), (prop) => new string[] { }, true);
-        public Property<BooleanValue> isAbstract { get; } = new Property<BooleanValue>(nameof(isAbstract), typeof(General), () => false,              (prop) => new string[] { }, true);
-        public Property<BooleanValue> isRemoved  { get; } = new Property<BooleanValue>(nameof(isRemoved),  typeof(General), () => false,              (prop) => new string[] { }, true);
+        public Property<StringValue>  className  { get; } = new Property<StringValue>( nameof(className),  typeof(General), () => "NewClass",         true, PropertyValidators.ClassName);
+        public Property<GeneralValue> parent     { get; } = new Property<GeneralValue>(nameof(parent),     typeof(General), () => new GeneralValue(), true);
+        public Property<BooleanValue> isAbstract { get; } = new Property<BooleanValue>(nameof(isAbstract), typeof(General), () => false,              true);
+        public Property<BooleanValue> isRemoved  { get; } = new Property<BooleanValue>(nameof(isRemoved),  typeof(General), () => false,              true);
 
         public static General general;
 
@@ -79,49 +76,17 @@ namespace ModConstructor.ModClasses
             components.Add(new GeneralComponent(this));
         }
 
-        public XObject Pack(string name)
+        public override XElement PackElement(string name)
         {
-            return PackElement(name);
-        }
-
-        public XElement PackElement(string name)
-        {
-            XElement result = new XElement(name);
+            XElement result = base.PackElement(name);
             result.Add(new XAttribute("key", key));
-            foreach (var prop in GetType().GetProperties().Where(prop => prop.PropertyType.GetInterfaces().Any(face => face == typeof(IProperty))))
-            {
-                IProperty property = (IProperty)prop.GetValue(this);
-                if (property.changed) result.Add(property.Pack(prop.Name));
-            }
             return result;
         }
 
-        public void Restore(XAttribute data)
-        {
-
-        }
-
-        public void Restore(XElement data)
+        public override void Restore(XElement data)
         {
             key = data.Attribute("key")?.Value ?? data.Element("key")?.Value ?? GenerateIndex();
-
-            Dictionary<string, IProperty> dictionary = new Dictionary<string, IProperty>();
-
-            foreach (var prop in GetType().GetProperties().Where(prop => prop.PropertyType.GetInterfaces().Any(face => face == typeof(IProperty))))
-            {
-                IProperty property = (IProperty)prop.GetValue(this);
-                dictionary.Add(property.shortname, property);
-            }
-
-            foreach (var attr in data.Attributes())
-            {
-                if (dictionary.ContainsKey(attr.Name.LocalName)) dictionary[attr.Name.LocalName].Restore(attr);
-            }
-
-            foreach (var elem in data.Elements())
-            {
-                if (dictionary.ContainsKey(elem.Name.LocalName)) dictionary[elem.Name.LocalName].Restore(elem);
-            }
+            base.Restore(data);
         }
 
         public void Remove()

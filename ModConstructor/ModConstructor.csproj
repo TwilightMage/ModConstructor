@@ -130,6 +130,16 @@
     <Compile Include="ModClasses\IProperty.cs" />
     <Compile Include="ModClasses\IValue.cs" />
     <Compile Include="ModClasses\Localizator.cs" />
+    <Compile Include="ModClasses\ValueSolution.cs" />
+    <Compile Include="ModClasses\Values\BooleanValue.cs" />
+    <Compile Include="ModClasses\Values\EnumerableValue.cs" />
+    <Compile Include="ModClasses\Values\FloatValue.cs" />
+    <Compile Include="ModClasses\Values\GeneralValue.cs" />
+    <Compile Include="ModClasses\Values\MoneyValue.cs" />
+    <Compile Include="ModClasses\Values\NumberValue.cs" />
+    <Compile Include="ModClasses\Values\SpriteValue.cs" />
+    <Compile Include="ModClasses\Values\StringValue.cs" />
+    <Compile Include="ModClasses\Values\StringValueLocalizable.cs" />
     <Compile Include="Settings.cs" />
     <Compile Include="Settings.xaml.cs">
       <DependentUpon>Settings.xaml</DependentUpon>

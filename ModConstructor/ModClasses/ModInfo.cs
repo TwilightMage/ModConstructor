@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModConstructor.ModClasses.Values;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
@@ -13,7 +14,7 @@ using System.Xml.Linq;
 namespace ModConstructor.ModClasses
 {
     [Serializable]
-    public class ModInfo : INotifyPropertyChanged
+    public class ModInfo : ValueSolution
     {
         public class Version
         {
@@ -65,39 +66,25 @@ namespace ModConstructor.ModClasses
             }
         }
 
+        public override string where => name.value;
+
         MainWindow window;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public Property<StringValue> name             { get; } = new Property<StringValue>(     nameof(name),          typeof(ModInfo), () => "",                                   true);
+                                                                                                                                                                                   
+        public PropertyList<StringValue> authors      { get; } = new PropertyList<StringValue>( nameof(authors),       typeof(ModInfo), () => "",                                   true);
+        public Property<StringValue> version          { get; } = new Property<StringValue>(     nameof(version),       typeof(ModInfo), () => (new Version(0, 0, 0, 1)).ToString(), true);
+        public Property<StringValue> displayName      { get; } = new Property<StringValue>(     nameof(displayName),   typeof(ModInfo), () => "",                                   true);
+        public Property<StringValue> homePage         { get; } = new Property<StringValue>(     nameof(homePage),      typeof(ModInfo), () => "",                                   true);
+        public Property<BooleanValue> hideCode        { get; } = new Property<BooleanValue>(    nameof(hideCode),      typeof(ModInfo), () => true,                                 true);
+        public Property<BooleanValue> hideResources   { get; } = new Property<BooleanValue>(    nameof(hideResources), typeof(ModInfo), () => true,                                 true);
+        public Property<BooleanValue> includeSource   { get; } = new Property<BooleanValue>(    nameof(includeSource), typeof(ModInfo), () => false,                                true);
+        public PropertyList<StringValue> buildIgnores { get; } = new PropertyList<StringValue>( nameof(buildIgnores),  typeof(ModInfo), () => "",                                   true);
+        public Property<StringValue> description      { get; } = new Property<StringValue>(     nameof(description),   typeof(ModInfo), () => new StringValue("", true),            true);
+                                                                                                                                                                                   
+        public PropertyList<Item> items               { get; } = new PropertyList<Item>(        nameof(items),         typeof(ModInfo), () => new Item(),                           true);
 
-        public Property<StringValue> name             { get; } = new Property<StringValue>(     nameof(name),          typeof(ModInfo), () => "",                                       (str) => new string[] { }, true);
-                                                                                                                                                                                    
-        public PropertyList<StringValue> authors      { get; } = new PropertyList<StringValue>( nameof(authors),       typeof(ModInfo), () => "",                                       (str) => new string[] { }, true);
-        public Property<StringValue> version          { get; } = new Property<StringValue>(     nameof(version),       typeof(ModInfo), () => (new Version(0, 0, 0, 1)).ToString(),     (str) => new string[] { }, true);
-        public Property<StringValue> displayName      { get; } = new Property<StringValue>(     nameof(displayName),   typeof(ModInfo), () => "",                                       (str) => new string[] { }, true);
-        public Property<StringValue> homePage         { get; } = new Property<StringValue>(     nameof(homePage),      typeof(ModInfo), () => "",                                       (str) => new string[] { }, true);
-        public Property<BooleanValue> hideCode        { get; } = new Property<BooleanValue>(    nameof(hideCode),      typeof(ModInfo), () => true,                                     (str) => new string[] { }, true);
-        public Property<BooleanValue> hideResources   { get; } = new Property<BooleanValue>(    nameof(hideResources), typeof(ModInfo), () => true,                                     (str) => new string[] { }, true);
-        public Property<BooleanValue> includeSource   { get; } = new Property<BooleanValue>(    nameof(includeSource), typeof(ModInfo), () => false,                                    (str) => new string[] { }, true);
-        public PropertyList<StringValue> buildIgnores { get; } = new PropertyList<StringValue>( nameof(buildIgnores),  typeof(ModInfo), () => "",                                       (str) => new string[] { }, true);
-        public Property<StringValue> description      { get; } = new Property<StringValue>(     nameof(description),   typeof(ModInfo), () => new StringValue("", true),                (str) => new string[] { }, true);
-                                                                                                                                                                                    
-        public PropertyList<Item> items               { get; } = new PropertyList<Item>(        nameof(items),         typeof(ModInfo), () => new Item(),                               (str) => new string[] { }, true);
-
-        public IEnumerable<StringValueLocalizable.Presenter> localization
-        {
-            get
-            {
-                List<StringValueLocalizable.Presenter> result = new List<StringValueLocalizable.Presenter>();
-                foreach (General obj in General.userCreated)
-                {
-                    foreach (var prop in obj.GetType().GetProperties().Where(prop => prop.PropertyType.GetInterfaces().Any(face => face == typeof(IProperty)) && prop.PropertyType.GetGenericArguments()[0] == typeof(StringValueLocalizable)))
-                    {
-                        result.Add(new StringValueLocalizable.Presenter(obj, (prop.GetValue(obj) as Property<StringValueLocalizable>)));
-                    }
-                }
-                return result;
-            }
-        }
+        public ObservableCollection<StringValueLocalizable> localization { get; } = new ObservableCollection<StringValueLocalizable>();
 
         private int _curLang = 0;
         public int curLang
@@ -106,7 +93,7 @@ namespace ModConstructor.ModClasses
             set
             {
                 _curLang = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("curLang"));
+                PropertyChange("curLang");
                 StringValueLocalizable.SetLanguage((StringValueLocalizable.Language)curLang);
             }
         }
@@ -124,7 +111,7 @@ namespace ModConstructor.ModClasses
 
             name.value = info.modName.value;
 
-            authors.Fill(info.authors);
+            foreach (var author in info.authors) authors.Add(new StringValue(author));
             version.value = (new Version(0, 0, 0, 1)).ToString();
             displayName.value = info.displayName.value;
             homePage.value = info.homePage.value;
@@ -132,34 +119,6 @@ namespace ModConstructor.ModClasses
             hideResources.value = true;
             includeSource.value = false;
             description.value = info.description.value;
-        }
-
-        public static ModInfo Parse(string data)
-        {
-            XElement tree = XElement.Parse(data);
-
-            ModInfo mod = new ModInfo(tree.Attribute("name")?.Value ?? tree.Element("name")?.Value);
-
-            Dictionary<string, IProperty> dictionary = new Dictionary<string, IProperty>();
-
-            // mod.GetType().GetProperties()[1].PropertyType.GetInterfaces()[1]
-            foreach (var prop in mod.GetType().GetProperties().Where(prop => prop.PropertyType.GetInterfaces().Any(face => face == typeof(IProperty))))
-            {
-                IProperty property = (IProperty)prop.GetValue(mod);
-                dictionary.Add(property.shortname, property);
-            }
-
-            foreach (var attr in tree.Attributes())
-            {
-                if (dictionary.ContainsKey(attr.Name.LocalName)) dictionary[attr.Name.LocalName].Restore(attr);
-            }
-
-            foreach (var elem in tree.Elements())
-            {
-                if (dictionary.ContainsKey(elem.Name.LocalName)) dictionary[elem.Name.LocalName].Restore(elem);
-            }
-
-            return mod;
         }
 
         public void PushMod()
@@ -207,10 +166,8 @@ namespace ModConstructor.ModClasses
             {
                 case "usings":
                     return "using System;";
-                    break;
                 case "modName":
                     return name.value;
-                    break;
                 case "notDedServLoadCode":
 
                     break;

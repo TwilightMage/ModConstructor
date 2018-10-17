@@ -1,5 +1,6 @@
 ﻿using ModConstructor.Controls;
 using ModConstructor.ModClasses;
+using ModConstructor.ModClasses.Values;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -71,11 +72,11 @@ namespace ModConstructor
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Property<StringValue>     modName     { get; } = new Property<StringValue>(     nameof(modName),     typeof(CreateModInfo), () => "NewMod",                  (prop) => new string[] { }, validator: PropertyValidators.ClassName);
-        public Property<StringValue>     displayName { get; } = new Property<StringValue>(     nameof(displayName), typeof(CreateModInfo), () => "Новый мод",               (prop) => new string[] { });
-        public Property<StringValue>     homePage    { get; } = new Property<StringValue>(     nameof(homePage),    typeof(CreateModInfo), () => "",                        (prop) => new string[] { });
-        public Property<StringValue>     description { get; } = new Property<StringValue>(     nameof(description), typeof(CreateModInfo), () => new StringValue("", true), (prop) => new string[] { });
-        public PropertyList<StringValue> authors     { get; } = new PropertyList<StringValue>( nameof(displayName), typeof(CreateModInfo), () => "",                        (prop) => new string[] { });
+        public Property<StringValue>     modName     { get; } = new Property<StringValue>(     nameof(modName),     typeof(CreateModInfo), () => "NewMod",                validator: PropertyValidators.ClassName);
+        public Property<StringValue>     displayName { get; } = new Property<StringValue>(     nameof(displayName), typeof(CreateModInfo), () => "Новый мод"              );
+        public Property<StringValue>     homePage    { get; } = new Property<StringValue>(     nameof(homePage),    typeof(CreateModInfo), () => ""                       );
+        public Property<StringValue>     description { get; } = new Property<StringValue>(     nameof(description), typeof(CreateModInfo), () => new StringValue("", true));
+        public PropertyList<StringValue> authors     { get; } = new PropertyList<StringValue>( nameof(displayName), typeof(CreateModInfo), () => ""                       );
 
         public bool acceptable => !modName.hasError;
 

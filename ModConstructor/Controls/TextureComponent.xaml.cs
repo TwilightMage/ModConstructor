@@ -1,4 +1,5 @@
 ﻿using ModConstructor.ModClasses;
+using ModConstructor.ModClasses.Values;
 using System;
 using System.Collections.Generic;
 using System.Linq;

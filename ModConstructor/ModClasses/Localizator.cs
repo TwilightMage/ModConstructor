@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ModConstructor.ModClasses
 {
-    public class Localizator : IValue
+    /*public class Localizator : IValue
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
@@ -100,5 +100,5 @@ namespace ModConstructor.ModClasses
             key = data.Attribute("Fr")?.Value ?? data.Element("Fr")?.Value ?? "";
             key = data.Attribute("De")?.Value ?? data.Element("De")?.Value ?? "";
         }
-    }
+    }*/
 }
