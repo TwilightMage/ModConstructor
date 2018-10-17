@@ -58,6 +58,8 @@ namespace ModConstructor.ModClasses
             parent.value.filters.Add(GeneralValue.Except(this));
         }
 
+        public override string where => $"{base.where}.{className.value}";
+
         public bool IsChildOf(General parent)
         {
             return this.parent.value.item == parent ? true : this.parent.value.item != null ? this.parent.value.item.IsChildOf(parent) : false;

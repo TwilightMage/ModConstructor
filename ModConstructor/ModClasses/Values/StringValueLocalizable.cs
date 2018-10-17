@@ -63,7 +63,7 @@ namespace ModConstructor.ModClasses.Values
 
         public string FromLanguage(Language lang)
         {
-            switch (language)
+            switch (lang)
             {
                 case Language.English:
                     return En.value;
@@ -148,9 +148,19 @@ namespace ModConstructor.ModClasses.Values
 
         public virtual string TakeLocalizationString(Language lang) => $"{where}={FromLanguage(lang)}";
 
-        public class ItemName : StringValueLocalizable
+        public class Bastard : StringValueLocalizable
         {
-            public override string where => $"{property.where}.";
+            public string bastard;
+
+            public Bastard(string bastard, bool big = false) : base(big)
+            {
+                this.bastard = bastard;
+            }
+
+            public override string TakeLocalizationString(Language lang)
+            {
+                return $"{bastard}.{(property.owner as General).className}={FromLanguage(lang)}";
+            }
         }
     }
 }

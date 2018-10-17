@@ -89,21 +89,21 @@ namespace ModConstructor
                 case StringValueLocalizable.Language.English:
                     return $@"{modLocalization}\en-US.lang";
                 case StringValueLocalizable.Language.Deutsch:
-                    return $@"{modLocalization}\deutsch.lang";
+                    return $@"{modLocalization}\de-DE.lang";
                 case StringValueLocalizable.Language.Italian:
-                    return $@"{modLocalization}\italian.lang";
+                    return $@"{modLocalization}\it-IT.lang";
                 case StringValueLocalizable.Language.French:
-                    return $@"{modLocalization}\french.lang";
+                    return $@"{modLocalization}\fr-FR.lang";
                 case StringValueLocalizable.Language.Spanish:
-                    return $@"{modLocalization}\spanish.lang";
+                    return $@"{modLocalization}\es-ES.lang";
                 case StringValueLocalizable.Language.Russian:
                     return $@"{modLocalization}\ru-RU.lang";
                 case StringValueLocalizable.Language.Chinese:
-                    return $@"{modLocalization}\chinese.lang";
+                    return $@"{modLocalization}\zh-Hans.lang";
                 case StringValueLocalizable.Language.Brazilian:
-                    return $@"{modLocalization}\brasilian.lang";
+                    return $@"{modLocalization}\pt-BR.lang";
                 case StringValueLocalizable.Language.Polish:
-                    return $@"{modLocalization}\polish.lang";
+                    return $@"{modLocalization}\pl-PL.lang";
                 default:
                     return "";
             }

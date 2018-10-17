@@ -55,38 +55,38 @@ namespace ModConstructor.ModClasses
             "Янтарный (квестовый)"
         };
 
-        public Property<EnumerableValue>        preset      { get; } = new Property<EnumerableValue>(       nameof(preset),      typeof(Item), () => new EnumerableValue(nameof(preset), 1),             true);
-        public Property<GeneralValue>           ammo        { get; } = new Property<GeneralValue>(          nameof(ammo),        typeof(Item), () => new GeneralValue(GeneralValue.ChildOf(item, true)), true);
-        public Property<GeneralValue>           block       { get; } = new Property<GeneralValue>(          nameof(block),       typeof(Item), () => new GeneralValue(GeneralValue.ChildOf(item, true)), true);
-
-        public Property<SpriteValue>            texture     { get; } = new Property<SpriteValue>(           nameof(texture),     typeof(Item), () => new SpriteValue(),                                  true);
-        public Property<StringValueLocalizable> displayName { get; } = new Property<StringValueLocalizable>(nameof(displayName), typeof(Item), () => new StringValueLocalizable(),                       true);
-        public Property<StringValueLocalizable> description { get; } = new Property<StringValueLocalizable>(nameof(description), typeof(Item), () => new StringValueLocalizable(),                       true);
-        public Property<EnumerableValue>        rare        { get; } = new Property<EnumerableValue>(       nameof(rare),        typeof(Item), () => new EnumerableValue(nameof(rare), 1),               true);
-        public Property<MoneyValue>             value       { get; } = new Property<MoneyValue>(            nameof(value),       typeof(Item), () => 1000,                                               true);
-        public Property<NumberValue>            maxStack    { get; } = new Property<NumberValue>(           nameof(maxStack),    typeof(Item), () => 99,                                                 true);
-
-        public Property<NumberValue>            pick        { get; } = new Property<NumberValue>(           nameof(pick),        typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            axe         { get; } = new Property<NumberValue>(           nameof(axe),         typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            hammer      { get; } = new Property<NumberValue>(           nameof(hammer),      typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            damage      { get; } = new Property<NumberValue>(           nameof(damage),      typeof(Item), () => 0,                                                  true);
-        public Property<FloatValue>             knockback   { get; } = new Property<FloatValue>(            nameof(knockback),   typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            healLife    { get; } = new Property<NumberValue>(           nameof(healLife),    typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            healMana    { get; } = new Property<NumberValue>(           nameof(healMana),    typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            defence     { get; } = new Property<NumberValue>(           nameof(defence),     typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            bait        { get; } = new Property<NumberValue>(           nameof(bait),        typeof(Item), () => 0,                                                  true);
-        public Property<NumberValue>            useTime     { get; } = new Property<NumberValue>(           nameof(useTime),     typeof(Item), () => 1,                                                  true);
-
-        public Property<BooleanValue>           questItem   { get; } = new Property<BooleanValue>(          nameof(questItem),   typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           accessory   { get; } = new Property<BooleanValue>(          nameof(accessory),   typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           potion      { get; } = new Property<BooleanValue>(          nameof(potion),      typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           consumable  { get; } = new Property<BooleanValue>(          nameof(consumable),  typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           melee       { get; } = new Property<BooleanValue>(          nameof(melee),       typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           magic       { get; } = new Property<BooleanValue>(          nameof(magic),       typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           ranged      { get; } = new Property<BooleanValue>(          nameof(ranged),      typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           thrown      { get; } = new Property<BooleanValue>(          nameof(thrown),      typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           summon      { get; } = new Property<BooleanValue>(          nameof(summon),      typeof(Item), () => false,                                              true);
-        public Property<BooleanValue>           sentry      { get; } = new Property<BooleanValue>(          nameof(sentry),      typeof(Item), () => false,                                              true);
+        public Property<EnumerableValue>                preset      { get; } = new Property<EnumerableValue>(               nameof(preset),      typeof(Item), () => new EnumerableValue(nameof(preset), 1),             true);
+        public Property<GeneralValue>                   ammo        { get; } = new Property<GeneralValue>(                  nameof(ammo),        typeof(Item), () => new GeneralValue(GeneralValue.ChildOf(item, true)), true);
+        public Property<GeneralValue>                   block       { get; } = new Property<GeneralValue>(                  nameof(block),       typeof(Item), () => new GeneralValue(GeneralValue.ChildOf(item, true)), true);
+                                                                                                                            
+        public Property<SpriteValue>                    texture     { get; } = new Property<SpriteValue>(                   nameof(texture),     typeof(Item), () => new SpriteValue(),                                  true);
+        public Property<StringValueLocalizable.Bastard> displayName { get; } = new Property<StringValueLocalizable.Bastard>(nameof(displayName), typeof(Item), () => new StringValueLocalizable.Bastard("ItemName"),     true);
+        public Property<StringValueLocalizable.Bastard> description { get; } = new Property<StringValueLocalizable.Bastard>(nameof(description), typeof(Item), () => new StringValueLocalizable.Bastard("ItemTooltip"),  true);
+        public Property<EnumerableValue>                rare        { get; } = new Property<EnumerableValue>(               nameof(rare),        typeof(Item), () => new EnumerableValue(nameof(rare), 1),               true);
+        public Property<MoneyValue>                     value       { get; } = new Property<MoneyValue>(                    nameof(value),       typeof(Item), () => 1000,                                               true);
+        public Property<NumberValue>                    maxStack    { get; } = new Property<NumberValue>(                   nameof(maxStack),    typeof(Item), () => 99,                                                 true);
+                                                                                                                            
+        public Property<NumberValue>                    pick        { get; } = new Property<NumberValue>(                   nameof(pick),        typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    axe         { get; } = new Property<NumberValue>(                   nameof(axe),         typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    hammer      { get; } = new Property<NumberValue>(                   nameof(hammer),      typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    damage      { get; } = new Property<NumberValue>(                   nameof(damage),      typeof(Item), () => 0,                                                  true);
+        public Property<FloatValue>                     knockback   { get; } = new Property<FloatValue>(                    nameof(knockback),   typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    healLife    { get; } = new Property<NumberValue>(                   nameof(healLife),    typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    healMana    { get; } = new Property<NumberValue>(                   nameof(healMana),    typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    defence     { get; } = new Property<NumberValue>(                   nameof(defence),     typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    bait        { get; } = new Property<NumberValue>(                   nameof(bait),        typeof(Item), () => 0,                                                  true);
+        public Property<NumberValue>                    useTime     { get; } = new Property<NumberValue>(                   nameof(useTime),     typeof(Item), () => 1,                                                  true);
+                                                                                                                            
+        public Property<BooleanValue>                   questItem   { get; } = new Property<BooleanValue>(                  nameof(questItem),   typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   accessory   { get; } = new Property<BooleanValue>(                  nameof(accessory),   typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   potion      { get; } = new Property<BooleanValue>(                  nameof(potion),      typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   consumable  { get; } = new Property<BooleanValue>(                  nameof(consumable),  typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   melee       { get; } = new Property<BooleanValue>(                  nameof(melee),       typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   magic       { get; } = new Property<BooleanValue>(                  nameof(magic),       typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   ranged      { get; } = new Property<BooleanValue>(                  nameof(ranged),      typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   thrown      { get; } = new Property<BooleanValue>(                  nameof(thrown),      typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   summon      { get; } = new Property<BooleanValue>(                  nameof(summon),      typeof(Item), () => false,                                              true);
+        public Property<BooleanValue>                   sentry      { get; } = new Property<BooleanValue>(                  nameof(sentry),      typeof(Item), () => false,                                              true);
 
         public static Item item;
 

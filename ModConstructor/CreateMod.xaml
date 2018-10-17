@@ -33,7 +33,7 @@
                     <Controls:PropertyField Header="Отображаемое имя" Target="{Binding displayName}" Datatype="String"/>
                     <Controls:PropertyField Header="Домашняя страница" Target="{Binding homePage}" Datatype="String"/>
                     <Controls:PropertyField Header="Описание" Target="{Binding description}" Datatype="String"/>
-                    <Controls:PropertyField Header="Авторы" Target="{Binding authors}" Datatype="String"/>
+                    <Controls:PropertyField Header="Авторы" Target="{Binding authors}" Datatype="String" Datamap="List"/>
                     <Grid Margin="0,2,0,0">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition/>

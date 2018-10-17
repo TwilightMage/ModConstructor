@@ -31,36 +31,9 @@ namespace ModConstructor.ModClasses
         void Initialize(IValue owner);
     }
 
-    public sealed class Property<T> : IProperty where T : IValue
+    public class PropertySolution : IProperty
     {
-        private class PropertyData
-        {
-            public Func<T> def;
-            public Func<string, T, string> validator;
-
-            public PropertyData(Func<T> def, Func<string, T, string> validator)
-            {
-                this.def = def;
-                this.validator = validator;
-            }
-        }
-
-        private static Dictionary<string, PropertyData> dictionary = new Dictionary<string, PropertyData>();
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        public IValue owner { get; set; }
-
-        public string shortname { get; }
-        public string name { get; }
-        public bool global { get; }
-
-        public T def() => dictionary[name].def();
-        public string Validate() => dictionary[name].validator?.Invoke(shortname, value) ?? "";
-        public void SetValidator(Func<string, T, string> validator) => dictionary[name].validator = validator;
-        public string where => $"{owner.where}.{shortname}";
-
-        private string _error = "";
+        protected string _error = "";
         public string error
         {
             get => _error;
@@ -86,6 +59,96 @@ namespace ModConstructor.ModClasses
 
         public bool hasError => !String.IsNullOrWhiteSpace(error);
 
+        public bool global { get; protected set; }
+
+        private bool _changed = false;
+        public bool changed
+        {
+            get => _changed;
+            set
+            {
+                _changed = value;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("changed"));
+                if (global)
+                {
+                    if (changed)
+                    {
+                        if (!MainWindow.Dirty.Contains(this)) MainWindow.Dirty.Add(this);
+                    }
+                    else
+                    {
+                        if (MainWindow.Dirty.Contains(this)) MainWindow.Dirty.Remove(this);
+                    }
+                }
+            }
+        }
+
+        public string shortname { get; protected set; }
+
+        public string name { get; protected set; }
+
+        public IValue owner { get; set; }
+
+        public string where => $"{owner.where}.{shortname}";
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public virtual void Initialize(IValue owner)
+        {
+            
+        }
+
+        public virtual XObject Pack(string name)
+        {
+            return new XAttribute(name, "PACKING NOT IMPLEMENTED");
+        }
+
+        public virtual XElement PackElement(string name)
+        {
+            return new XElement(name, "PACKING NOT IMPLEMENTED");
+        }
+
+        public virtual void Remove()
+        {
+            
+        }
+
+        public virtual void Restore(XAttribute data)
+        {
+            
+        }
+
+        public virtual void Restore(XElement data)
+        {
+            
+        }
+
+        public void PropertyChange(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+    }
+
+    public sealed class Property<T> : PropertySolution where T : IValue
+    {
+        private class PropertyData
+        {
+            public Func<T> def;
+            public Func<string, T, string> validator;
+
+            public PropertyData(Func<T> def, Func<string, T, string> validator)
+            {
+                this.def = def;
+                this.validator = validator;
+            }
+        }
+
+        private static Dictionary<string, PropertyData> dictionary = new Dictionary<string, PropertyData>();
+
+        public T def() => dictionary[name].def();
+        public string Validate() => dictionary[name].validator?.Invoke(shortname, value) ?? "";
+        public void SetValidator(Func<string, T, string> validator) => dictionary[name].validator = validator;
+
         private T _value;
         public T value
         {
@@ -104,7 +167,7 @@ namespace ModConstructor.ModClasses
                     _value.Initialize(this);
                     _value.PropertyChanged += UpdateNotifier;
                 }
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("value"));
+                PropertyChange("value");
                 ValueUpdated();
             }
         }
@@ -113,28 +176,6 @@ namespace ModConstructor.ModClasses
         {
             error = Validate();
             changed = !value.Equals(def());
-        }
-
-        private bool _dirty = false;
-        public bool changed
-        {
-            get => _dirty;
-            set
-            {
-                _dirty = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("changed"));
-                if (global)
-                {
-                    if (changed)
-                    {
-                        if (!MainWindow.Dirty.Contains(this)) MainWindow.Dirty.Add(this);
-                    }
-                    else
-                    {
-                        if (MainWindow.Dirty.Contains(this)) MainWindow.Dirty.Remove(this);
-                    }
-                }
-            }
         }
 
         public Property(string name, Type owner, Func<T> def, bool global = false, Func<string, T, string> validator = null)
@@ -159,10 +200,10 @@ namespace ModConstructor.ModClasses
         public XObject Pack(string name) => value.Pack(name);
         public XElement PackElement(string name) => value.PackElement(name);
         public void Reset() => value = def();
-        public void Restore(XAttribute data) => value.Restore(data);
-        public void Restore(XElement data) => value.Restore(data);
+        public override void Restore(XAttribute data) => value.Restore(data);
+        public override void Restore(XElement data) => value.Restore(data);
 
-        public void Remove()
+        public override void Remove()
         {
             value.Remove();
             if (global)
@@ -172,7 +213,7 @@ namespace ModConstructor.ModClasses
             }
         }
 
-        public void Initialize(IValue owner)
+        public override void Initialize(IValue owner)
         {
             this.owner = owner;
             value.Initialize(this);
