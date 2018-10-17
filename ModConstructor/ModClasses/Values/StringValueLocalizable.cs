@@ -61,35 +61,34 @@ namespace ModConstructor.ModClasses.Values
         public Property<StringValue> Br { get; } = new Property<StringValue>(nameof(Br), typeof(StringValueLocalizable), () => "", true);
         public Property<StringValue> Po { get; } = new Property<StringValue>(nameof(Po), typeof(StringValueLocalizable), () => "", true);
 
-        public string localized
+        public string FromLanguage(Language lang)
         {
-            get
+            switch (language)
             {
-                switch (language)
-                {
-                    case Language.English:
-                        return En.value;
-                    case Language.Deutsch:
-                        return De.value;
-                    case Language.Italian:
-                        return It.value;
-                    case Language.French:
-                        return Fr.value;
-                    case Language.Spanish:
-                        return Es.value;
-                    case Language.Russian:
-                        return Ru.value;
-                    case Language.Chinese:
-                        return Ch.value;
-                    case Language.Brazilian:
-                        return Br.value;
-                    case Language.Polish:
-                        return Po.value;
-                    default:
-                        return "";
-                }
+                case Language.English:
+                    return En.value;
+                case Language.Deutsch:
+                    return De.value;
+                case Language.Italian:
+                    return It.value;
+                case Language.French:
+                    return Fr.value;
+                case Language.Spanish:
+                    return Es.value;
+                case Language.Russian:
+                    return Ru.value;
+                case Language.Chinese:
+                    return Ch.value;
+                case Language.Brazilian:
+                    return Br.value;
+                case Language.Polish:
+                    return Po.value;
+                default:
+                    return "";
             }
         }
+
+        public string localized => FromLanguage(language);
 
         public static void SetLanguage(Language newLanguage)
         {
@@ -105,6 +104,15 @@ namespace ModConstructor.ModClasses.Values
         {
             LanguageChanged += OnlanguageChanged;
             this.big = big;
+            En.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            De.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            It.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            Fr.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            Es.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            Ru.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            Ch.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            Br.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
+            Po.PropertyChanged += delegate { PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("localized")); };
         }
 
         public override bool Equals(object obj)
@@ -136,6 +144,13 @@ namespace ModConstructor.ModClasses.Values
         public override void Restore(XElement data)
         {
             base.Restore(data);
+        }
+
+        public virtual string TakeLocalizationString(Language lang) => $"{where}={FromLanguage(lang)}";
+
+        public class ItemName : StringValueLocalizable
+        {
+            public override string where => $"{property.where}.";
         }
     }
 }

@@ -105,15 +105,15 @@
                                     <DataGrid.Columns>
 
                                         <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding where}" Header="Ключ" Width="2*" IsReadOnly="True"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding En}" Header="En" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding De}" Header="De" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding It}" Header="It" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Fr}" Header="Fr" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Es}" Header="Es" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Ru}" Header="Ru" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Ch}" Header="Ch" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Br}" Header="Br" Width="*"/>
-                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Po}" Header="Po" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding En.value.value}" Header="En" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding De.value.value}" Header="De" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding It.value.value}" Header="It" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Fr.value.value}" Header="Fr" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Es.value.value}" Header="Es" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Ru.value.value}" Header="Ru" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Ch.value.value}" Header="Ch" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Br.value.value}" Header="Br" Width="*"/>
+                                        <DataGridTextColumn ElementStyle="{StaticResource wrap}" Binding="{Binding Po.value.value}" Header="Po" Width="*"/>
 
                                     </DataGrid.Columns>
                                 </DataGrid>

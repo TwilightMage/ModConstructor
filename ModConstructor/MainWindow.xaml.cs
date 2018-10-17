@@ -22,6 +22,7 @@ using Cursors = System.Windows.Input.Cursors;
 using Path = System.IO.Path;
 using MouseEventArgs = System.Windows.Input.MouseEventArgs;
 using ModConstructor.ModClasses.Values;
+using static ModConstructor.ModClasses.Values.StringValueLocalizable;
 
 namespace ModConstructor
 {
@@ -62,14 +63,12 @@ namespace ModConstructor
 
         public Visibility displayInit => mod == null ? Visibility.Visible : Visibility.Collapsed;
 
-        #region init
-        public ObservableCollection<string> mods { get; set; } = new ObservableCollection<string>();
-
         public string modloaderPath { get; set; } = $@"{Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)}\My Games\Terraria\ModLoader";
         public string modSourcesPath => $@"{modloaderPath}\Mod Sources";
         public string modPath => $@"{modSourcesPath}\{mod.name}";
         public string modItems => $@"{modPath}\Items";
         public string modProjectiles => $@"{modPath}\Projectiles";
+        public string modLocalization => $@"{modPath}\Localization";
 
         public string programFile => $@"{modloaderPath}\constructor.xml";
         public string modFile => $@"{modPath}\{mod.name}.mtf";
@@ -82,6 +81,36 @@ namespace ModConstructor
         public string ItemFile(string name, string subdir) => $@"{modItems}\{subdir}\{name}";
         public string ItemScript(string name, string subdir) => $@"{ItemFile(name, subdir)}.cs";
         public string ItemSprite(string name, string subdir) => $@"{ItemFile(name, subdir)}.png";
+
+        public string LocalizationFile(Language lang)
+        {
+            switch (lang)
+            {
+                case StringValueLocalizable.Language.English:
+                    return $@"{modLocalization}\en-US.lang";
+                case StringValueLocalizable.Language.Deutsch:
+                    return $@"{modLocalization}\deutsch.lang";
+                case StringValueLocalizable.Language.Italian:
+                    return $@"{modLocalization}\italian.lang";
+                case StringValueLocalizable.Language.French:
+                    return $@"{modLocalization}\french.lang";
+                case StringValueLocalizable.Language.Spanish:
+                    return $@"{modLocalization}\spanish.lang";
+                case StringValueLocalizable.Language.Russian:
+                    return $@"{modLocalization}\ru-RU.lang";
+                case StringValueLocalizable.Language.Chinese:
+                    return $@"{modLocalization}\chinese.lang";
+                case StringValueLocalizable.Language.Brazilian:
+                    return $@"{modLocalization}\brasilian.lang";
+                case StringValueLocalizable.Language.Polish:
+                    return $@"{modLocalization}\polish.lang";
+                default:
+                    return "";
+            }
+        }
+
+        #region init
+        public ObservableCollection<string> mods { get; set; } = new ObservableCollection<string>();
 
         private int _currentTab = 0;
         public int currentTab
@@ -546,7 +575,7 @@ namespace ModConstructor
             mod.items.Add();
         }
 
-        public void EnsureDir(string path)
+        public static void EnsureDir(string path)
         {
             string[] pathParts = path.Split('\\');
             string part = pathParts[0];
@@ -566,6 +595,7 @@ namespace ModConstructor
             mod.PushBuild();
             mod.PushDescription();
             mod.PushMod();
+            mod.PushLocalization();
 
             clearFolder(modItems);
             foreach (Item item in mod.items)

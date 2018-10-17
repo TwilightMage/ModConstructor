@@ -201,6 +201,18 @@ namespace ModConstructor.ModClasses
 
         }
 
+        public void PushLocalization()
+        {
+            for (int i=0; i< Enum.GetNames(typeof(StringValueLocalizable.Language)).Count(); i++)
+            {
+                MainWindow.EnsureDir(MainWindow.instance.LocalizationFile((StringValueLocalizable.Language)i));
+                using (StreamWriter sw = new StreamWriter(MainWindow.instance.LocalizationFile((StringValueLocalizable.Language)i)))
+                {
+                    foreach (StringValueLocalizable loc in MainWindow.instance.mod.localization) sw.WriteLine(loc.TakeLocalizationString((StringValueLocalizable.Language)i));
+                }
+            }
+        }
+
         public void Init()
         {
             Directory.CreateDirectory(window.modPath);
@@ -214,6 +226,7 @@ namespace ModConstructor.ModClasses
             PushBuild();
             PushDescription();
             PushScript();
+            PushLocalization();
         }
     }
 }
