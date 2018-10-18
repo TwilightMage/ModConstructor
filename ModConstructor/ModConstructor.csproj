@@ -127,6 +127,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="ModClasses\CompositeString.cs" />
     <Compile Include="ModClasses\IProperty.cs" />
     <Compile Include="ModClasses\IValue.cs" />
     <Compile Include="ModClasses\Localizator.cs" />

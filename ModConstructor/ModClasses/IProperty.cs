@@ -14,8 +14,6 @@ namespace ModConstructor.ModClasses
 {
     public interface IProperty : INotifyPropertyChanged
     {
-        string error { get; set; }
-        bool hasError { get; }
         bool global { get; }
         bool changed { get; set; }
         string shortname { get; }
@@ -33,32 +31,6 @@ namespace ModConstructor.ModClasses
 
     public class PropertySolution : IProperty
     {
-        protected string _error = "";
-        public string error
-        {
-            get => _error;
-            set
-            {
-                if (_error == value) return;
-                _error = value;
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("error"));
-                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("hasError"));
-                if (global)
-                {
-                    if (hasError)
-                    {
-                        if (!MainWindow.Errors.Contains(this)) MainWindow.Errors.Add(this);
-                    }
-                    else
-                    {
-                        if (MainWindow.Errors.Contains(this)) MainWindow.Errors.Remove(this);
-                    }
-                }
-            }
-        }
-
-        public bool hasError => !String.IsNullOrWhiteSpace(error);
-
         public bool global { get; protected set; }
 
         private bool _changed = false;
@@ -458,7 +430,7 @@ namespace ModConstructor.ModClasses
 
     public static class PropertyValidators
     {
-        public static string ClassName<T>(string name, T property) where T : IValueString
+        public static string ClassName<T>(string name, T property) where T : IString
         {
             string value = property.AsString();
             if (String.IsNullOrWhiteSpace(value)) return $"Необходимо указать {name}.";

@@ -14,7 +14,7 @@ using System.Xml.Linq;
 namespace ModConstructor.ModClasses
 {
     [Serializable]
-    public class ModInfo : ValueSolution
+    public class ModInfo : ValueObject
     {
         public class Version
         {

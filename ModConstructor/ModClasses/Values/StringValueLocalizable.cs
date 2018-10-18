@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ModConstructor.ModClasses.Values
 {
-    public class StringValueLocalizable : ValueSolution, IValueString
+    public class StringValueLocalizable : ValueObject, IString
     {
         public enum Language
         {

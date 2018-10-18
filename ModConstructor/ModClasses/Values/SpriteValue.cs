@@ -14,7 +14,7 @@ namespace ModConstructor.ModClasses.Values
     public class SpriteValue : IValue
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public event ChangeEventHandler<Bitmap> Change;
+        public event ChangedEventHandler<Bitmap> Change;
 
         public IProperty property { get; set; }
         public string where => property.where;

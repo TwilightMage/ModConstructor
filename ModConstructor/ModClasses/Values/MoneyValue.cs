@@ -8,7 +8,7 @@ using System.Xml.Linq;
 
 namespace ModConstructor.ModClasses.Values
 {
-    public class MoneyValue : IValueFloat
+    public class MoneyValue : IFloat
     {
         public event PropertyChangedEventHandler PropertyChanged;
 

@@ -278,8 +278,8 @@ namespace ModConstructor
         }
         #endregion
 
-        public static ObservableCollection<IProperty> Errors { get; set; } = new ObservableCollection<IProperty>();
-        public static ObservableCollection<IProperty> Dirty { get; set; } = new ObservableCollection<IProperty>();
+        public static ObservableCollection<Value> Errors { get; set; } = new ObservableCollection<Value>();
+        public static ObservableCollection<Value> Dirty { get; set; } = new ObservableCollection<Value>();
 
         public static string SimplifyString(string input)
         {

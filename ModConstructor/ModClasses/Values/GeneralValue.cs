@@ -11,7 +11,7 @@ namespace ModConstructor.ModClasses.Values
     public class GeneralValue : IValue
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        public event ChangeEventHandler<General> Change;
+        public event ChangedEventHandler<General> Change;
         public static event EventHandler AssignLinks;
 
         public string cachedKey = "";

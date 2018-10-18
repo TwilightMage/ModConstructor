@@ -15,7 +15,7 @@ using ModConstructor.ModClasses.Values;
 
 namespace ModConstructor.ModClasses
 {
-    public class General : ValueSolution
+    public class General : ValueObject
     {
         public class NullKeyException : Exception { }
 
