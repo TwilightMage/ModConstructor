@@ -1,30 +1,34 @@
-﻿using System;
+﻿using ModConstructor.ModClasses.Values;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ModConstructor.ModClasses.Values
+namespace ModConstructor.ModClasses.Values.SimpleValues
 {
     public class SimpleValue<T> : Value
     {
-        public event ChangedEventHandler<T> ChangedBoolean;
+        public event ChangedEventHandler<T> ChangedSimple;
 
-        private T _value;
-        public T value
+        protected T _value;
+        public virtual T value
         {
             get => _value;
             set
             {
                 T before = _value;
                 _value = value;
+                if (before.Equals(value)) return;
+                ChangedSimple?.Invoke(before, value);
                 PropertyChange("value");
-                dirty = value.Equals(saved);
-                ChangedBoolean?.Invoke(before, value);
+                dirty = !value.Equals(saved);
                 Change();
             }
         }
+
+        public override bool changed => !value.Equals((property as PropertySpecialized<SimpleValue<T>>).def());
 
         private T _saved;
         public T saved

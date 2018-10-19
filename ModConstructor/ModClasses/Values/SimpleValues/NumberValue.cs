@@ -6,21 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ModConstructor.ModClasses.Values
+namespace ModConstructor.ModClasses.Values.SimpleValues
 {
-    public class StringValue : SimpleValue<string>, IString
+    public sealed class NumberValue : SimpleValue<int>
     {
-        public StringValue(string s) : base(s)
+        public NumberValue() : base()
         {
 
         }
 
-        public StringValue() : base ("")
+        public NumberValue(int value) : base(value)
         {
 
         }
 
-        public string AsString()
+        public override int AsNumber()
         {
             return value;
         }

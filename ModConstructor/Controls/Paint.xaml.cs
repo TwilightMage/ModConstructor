@@ -781,10 +781,10 @@ namespace ModConstructor.Controls
         
         public bool doubleScale
         {
-            get => source?.scale ?? false;
+            get => source?.saveScaled ?? false;
             set
             {
-                source.scale = value;
+                source.saveScaled = value;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs("doubleScale"));
             }
         }

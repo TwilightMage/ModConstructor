@@ -72,10 +72,10 @@ namespace ModConstructor
     {
         public event PropertyChangedEventHandler PropertyChanged;
 
-        public Property<StringValue>     modName     { get; } = new Property<StringValue>(     nameof(modName),     typeof(CreateModInfo), () => "NewMod",                validator: PropertyValidators.ClassName);
-        public Property<StringValue>     displayName { get; } = new Property<StringValue>(     nameof(displayName), typeof(CreateModInfo), () => "Новый мод"              );
-        public Property<StringValue>     homePage    { get; } = new Property<StringValue>(     nameof(homePage),    typeof(CreateModInfo), () => ""                       );
-        public Property<StringValue>     description { get; } = new Property<StringValue>(     nameof(description), typeof(CreateModInfo), () => new StringValue("", true));
+        public SingleProperty<StringValue>     modName     { get; } = new SingleProperty<StringValue>(     nameof(modName),     typeof(CreateModInfo), () => "NewMod",                validator: PropertyValidators.ClassName);
+        public SingleProperty<StringValue>     displayName { get; } = new SingleProperty<StringValue>(     nameof(displayName), typeof(CreateModInfo), () => "Новый мод"              );
+        public SingleProperty<StringValue>     homePage    { get; } = new SingleProperty<StringValue>(     nameof(homePage),    typeof(CreateModInfo), () => ""                       );
+        public SingleProperty<StringValue>     description { get; } = new SingleProperty<StringValue>(     nameof(description), typeof(CreateModInfo), () => new StringValue("", true));
         public PropertyList<StringValue> authors     { get; } = new PropertyList<StringValue>( nameof(displayName), typeof(CreateModInfo), () => ""                       );
 
         public bool acceptable => !modName.hasError;

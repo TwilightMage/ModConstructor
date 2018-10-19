@@ -12,10 +12,12 @@ using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Security.Cryptography;
 using ModConstructor.ModClasses.Values;
+using ModConstructor.ModClasses.Values.SimpleValues;
+using ModConstructor.ModClasses.Values.ComplexValues;
 
 namespace ModConstructor.ModClasses
 {
-    public class General : ValueObject
+    public class General : ComplexValue
     {
         public class NullKeyException : Exception { }
 
@@ -40,10 +42,10 @@ namespace ModConstructor.ModClasses
 
         public string key = GenerateIndex();
 
-        public Property<StringValue>  className  { get; } = new Property<StringValue>( nameof(className),  typeof(General), () => "NewClass",         true, PropertyValidators.ClassName);
-        public Property<GeneralValue> parent     { get; } = new Property<GeneralValue>(nameof(parent),     typeof(General), () => new GeneralValue(), true);
-        public Property<BooleanValue> isAbstract { get; } = new Property<BooleanValue>(nameof(isAbstract), typeof(General), () => false,              true);
-        public Property<BooleanValue> isRemoved  { get; } = new Property<BooleanValue>(nameof(isRemoved),  typeof(General), () => false,              true);
+        public SingleProperty<StringValue>  className  { get; } = new SingleProperty<StringValue>( nameof(className),  true, () => new StringValue("NewClass"), PropertyValidators.ClassName);
+        public SingleProperty<GeneralValue> parent     { get; } = new SingleProperty<GeneralValue>(nameof(parent),     true, () => new GeneralValue());
+        public SingleProperty<BooleanValue> isAbstract { get; } = new SingleProperty<BooleanValue>(nameof(isAbstract), true, () => new BooleanValue(false));
+        public SingleProperty<BooleanValue> isRemoved  { get; } = new SingleProperty<BooleanValue>(nameof(isRemoved),  true, () => new BooleanValue(false));
 
         public static General general;
 
@@ -57,8 +59,6 @@ namespace ModConstructor.ModClasses
         {
             parent.value.filters.Add(GeneralValue.Except(this));
         }
-
-        public override string where => $"{base.where}.{className.value}";
 
         public bool IsChildOf(General parent)
         {
@@ -89,20 +89,6 @@ namespace ModConstructor.ModClasses
         {
             key = data.Attribute("key")?.Value ?? data.Element("key")?.Value ?? GenerateIndex();
             base.Restore(data);
-        }
-
-        public void Remove()
-        {
-            foreach (var prop in GetType().GetProperties().Where(prop => prop.PropertyType.GetInterfaces().Any(face => face == typeof(IProperty))))
-            {
-                ((IProperty)prop.GetValue(this)).Remove();
-            }
-            OnRemove();
-        }
-
-        public virtual void OnRemove()
-        {
-
         }
 
         public virtual string GetPath()

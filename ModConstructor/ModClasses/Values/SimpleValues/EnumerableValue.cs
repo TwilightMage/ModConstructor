@@ -6,9 +6,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ModConstructor.ModClasses.Values
+namespace ModConstructor.ModClasses.Values.SimpleValues
 {
-    public class EnumerableValue : SimpleValue<int>, INumber
+    public sealed class EnumerableValue : SimpleValue<int>
     {
         public static Dictionary<string, string[]> dictionary = new Dictionary<string, string[]>();
 
@@ -26,19 +26,19 @@ namespace ModConstructor.ModClasses.Values
             dictionary[name] = Enum.GetNames(enumerable);
         }
 
-        public EnumerableValue(string name, int def = 0) : base(def)
+        public EnumerableValue(string name, int value = 0) : base(value)
         {
             if (!dictionary.ContainsKey(name)) throw new Exception("Given name not registered");
             this.name = name;
         }
 
-        public EnumerableValue(string name, int def = 0, params string[] items) : base(def)
+        public EnumerableValue(string name, int value = 0, params string[] items) : base(value)
         {
             dictionary[name] = items;
             this.name = name;
         }
 
-        public int AsNumber()
+        public override int AsNumber()
         {
             return value;
         }

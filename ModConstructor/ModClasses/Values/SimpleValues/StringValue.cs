@@ -6,21 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ModConstructor.ModClasses.Values
+namespace ModConstructor.ModClasses.Values.SimpleValues
 {
-    public class FloatValue : SimpleValue<float>, IFloat
+    public sealed class StringValue : SimpleValue<string>
     {
-        public FloatValue(float f) : base(f)
+        public StringValue() : base()
         {
 
         }
 
-        public FloatValue() : base (0)
+        public StringValue(string value) : base(value)
         {
 
         }
 
-        public float AsFloat()
+        public override string AsString()
         {
             return value;
         }

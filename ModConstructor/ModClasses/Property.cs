@@ -1,4 +1,6 @@
-﻿using System;
+﻿using ModConstructor.ModClasses.Values;
+using ModConstructor.ModClasses.Values.ComplexValues;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -12,13 +14,13 @@ using System.Xml.Linq;
 
 namespace ModConstructor.ModClasses
 {
-    public interface IProperty : INotifyPropertyChanged
+    /*public interface IProperty : INotifyPropertyChanged
     {
         bool global { get; }
         bool changed { get; set; }
         string shortname { get; }
         string name { get; }
-        IValue owner { get; set; }
+        ComplexValue owner { get; set; }
         string where { get; }
 
         void Remove();
@@ -26,10 +28,86 @@ namespace ModConstructor.ModClasses
         void Restore(XElement data);
         XObject Pack(string name);
         XElement PackElement(string name);
-        void Initialize(IValue owner);
+        void Initialize(ComplexValue owner);
+    }*/
+
+    public abstract class Property : INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        public bool global { get; }
+        public string name { get; }
+
+        public ComplexValue owner { get; protected set; }
+
+        public string where => $"{owner.where}.{name}";
+        public bool changed => values.Any(val => val.changed);
+
+        public abstract IEnumerable<Value> values { get; }
+
+        public abstract void Restore(XAttribute data);
+        public abstract void Restore(XElement data);
+        public abstract XObject Pack(string name);
+        public abstract XElement PackElement(string name);
+        public abstract string WhereAmI(Value val);
+
+        public Property(string name, bool global)
+        {
+            this.name = name;
+            this.global = global;
+        }
+
+        public virtual void Remove()
+        {
+            foreach (var value in values) value.Remove();
+        }
+
+        public virtual void Initialize(ComplexValue owner)
+        {
+            this.owner = owner;
+            if (owner != null) owner.PropertyChanged += OwnerChanged;
+            foreach (var value in values) value.Initialize(this);
+        }
+
+        public virtual void Save()
+        {
+            foreach (var value in values) value.Save();
+        }
+
+        public virtual void Revert()
+        {
+            foreach (var value in values) value.Revert();
+        }
+
+        public void PropertyChange(string prop)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
+        }
+
+        private void OwnerChanged(object sender, PropertyChangedEventArgs e)
+        {
+            switch (e.PropertyName)
+            {
+                case "where":
+                    PropertyChange("where");
+                    break;
+            }
+        }
     }
 
-    public class PropertySolution : IProperty
+    public abstract class PropertySpecialized<T> : Property where T : Value
+    {
+        public Func<T> def;
+        public Func<PropertySpecialized<T>, T, string> validator;
+
+        public PropertySpecialized(string name, bool global, Func<T> def, Func<PropertySpecialized<T>, T, string> validator = null) : base(name, global)
+        {
+            this.def = def;
+            this.validator = validator;
+        }
+    }
+
+    /*public class PropertySolution : IProperty
     {
         public bool global { get; protected set; }
 
@@ -99,11 +177,11 @@ namespace ModConstructor.ModClasses
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(prop));
         }
-    }
+    }*/
 
-    public sealed class Property<T> : PropertySolution where T : IValue
+    public sealed class SingleProperty<T> : PropertySpecialized<T> where T : Value
     {
-        private class PropertyData
+        /*private class PropertyData
         {
             public Func<T> def;
             public Func<string, T, string> validator;
@@ -150,7 +228,7 @@ namespace ModConstructor.ModClasses
             changed = !value.Equals(def());
         }
 
-        public Property(string name, Type owner, Func<T> def, bool global = false, Func<string, T, string> validator = null)
+        public SingleProperty(string name, Type owner, Func<T> def, bool global = false, Func<string, T, string> validator = null)
         {
             shortname = name;
             string fullname = $"{owner.FullName}.{name}";
@@ -167,7 +245,7 @@ namespace ModConstructor.ModClasses
         }
 
         private void UpdateNotifier(object sender, PropertyChangedEventArgs e) => ValueUpdated();
-        public static implicit operator T(Property<T> property) => property.value;
+        public static implicit operator T(SingleProperty<T> property) => property.value;
         public override string ToString() => value.ToString();
         public XObject Pack(string name) => value.Pack(name);
         public XElement PackElement(string name) => value.PackElement(name);
@@ -189,10 +267,43 @@ namespace ModConstructor.ModClasses
         {
             this.owner = owner;
             value.Initialize(this);
+        }*/
+        public override IEnumerable<Value> values => new Value[] { value };
+
+        public T value { get; }
+
+        public SingleProperty(string name, bool global, Func<T> def, Func<PropertySpecialized<T>, T, string> validator = null) : base(name, global, def, validator)
+        {
+
+        }
+
+        public override XObject Pack(string name)
+        {
+            return value.Pack(name);
+        }
+
+        public override XElement PackElement(string name)
+        {
+            return value.PackElement(name);
+        }
+
+        public override void Restore(XAttribute data)
+        {
+            value.Restore(data);
+        }
+
+        public override void Restore(XElement data)
+        {
+            value.Restore(data);
+        }
+
+        public override string WhereAmI(Value val)
+        {
+            return where;
         }
     }
 
-    public interface IPropertyList : IProperty, INotifyCollectionChanged
+    /*public interface IPropertyList : IProperty, INotifyCollectionChanged
     {
         void Add();
         void Clear();
@@ -322,10 +433,6 @@ namespace ModConstructor.ModClasses
             CollectionChanged?.Invoke(this, e);
 
             changed = list.Count > 0;
-
-            /*asd
-            error = validator();
-            dirty = !list.Equals(def());*/
         }
 
         private void UpdateNotifier(object sender, PropertyChangedEventArgs e)
@@ -365,11 +472,6 @@ namespace ModConstructor.ModClasses
             list.Add(val);
             val.Initialize(this);
         }
-
-        /*public void Fill(PropertyList<T> proplist)
-        {
-            foreach (var item in proplist) list.Add(item);
-        }*/
 
         public void Clear()
         {
@@ -426,16 +528,87 @@ namespace ModConstructor.ModClasses
         {
             this.owner = owner;
         }
+    }*/
+
+    public sealed class ListProperty<T> : PropertySpecialized<T> where T : Value
+    {
+        public ObservableCollection<T> list = new ObservableCollection<T>();
+
+        public override IEnumerable<Value> values => list;
+
+        public ListProperty(string name, bool global, Func<T> def, Func<PropertySpecialized<T>, T, string> validator = null) : base(name, global, def, validator)
+        {
+
+        }
+
+        public override XObject Pack(string name)
+        {
+            return PackElement(name);
+        }
+
+        public override XElement PackElement(string name)
+        {
+            return new XElement(name, values.Select(val => val.Pack("element")));
+        }
+
+        public override void Restore(XAttribute data)
+        {
+            Message.Inform(MainWindow.instance, "Ошибка", "Восстановление списка данных из аттрибута невозможно");
+        }
+
+        public override void Restore(XElement data)
+        {
+            foreach (var val in list) val.Remove();
+            list.Clear();
+            foreach (var dat in data.Elements())
+            {
+                T value = def();
+                value.Restore(dat);
+                value.Initialize(this);
+                list.Add(value);
+            }
+        }
+
+        public override string WhereAmI(Value val)
+        {
+            return $"{where}[{list.IndexOf((T)val)}]";
+        }
+
+        public void Add()
+        {
+            T val = def();
+            val.Initialize(this);
+            list.Add(val);
+        }
+
+        public void Append(T val)
+        {
+            if (val.initialized) return;
+            val.Initialize(this);
+            list.Add(val);
+        }
+
+        public void Remove(T val)
+        {
+            if (!list.Contains(val)) return;
+            list.Remove(val);
+        }
+
+        public void Clear()
+        {
+            foreach (var val in list) val.Remove();
+            list.Clear();
+        }
     }
 
     public static class PropertyValidators
     {
-        public static string ClassName<T>(string name, T property) where T : IString
+        public static string ClassName<T>(PropertySpecialized<T> specialized, T property) where T : Value
         {
             string value = property.AsString();
-            if (String.IsNullOrWhiteSpace(value)) return $"Необходимо указать {name}.";
-            else if (Regex.IsMatch(value, @"[^a-zA-Z\d_]")) return $@"{name} может состоять только из латинских букв, цифр и знаков ""_"".";
-            else if (Regex.IsMatch(value, @"^\d")) return $@"{name} не может начинаться с цифры.";
+            if (String.IsNullOrWhiteSpace(value)) return $"Необходимо указать {specialized.name}.";
+            else if (Regex.IsMatch(value, @"[^a-zA-Z\d_]")) return $@"{specialized.name} может состоять только из латинских букв, цифр и знаков ""_"".";
+            else if (Regex.IsMatch(value, @"^\d")) return $@"{specialized.name} не может начинаться с цифры.";
             else return "";
         }
     }

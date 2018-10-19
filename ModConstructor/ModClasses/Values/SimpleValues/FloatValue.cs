@@ -6,21 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ModConstructor.ModClasses.Values
+namespace ModConstructor.ModClasses.Values.SimpleValues
 {
-    public class BooleanValue : SimpleValue<bool>, IBoolean
+    public sealed class FloatValue : SimpleValue<float>
     {
-        public BooleanValue(bool b) : base(b)
+        public FloatValue() : base()
         {
 
         }
 
-        public BooleanValue() : base (false)
+        public FloatValue (float value) : base(value)
         {
 
         }
 
-        public bool AsBoolean()
+        public override float AsFloat()
         {
             return value;
         }

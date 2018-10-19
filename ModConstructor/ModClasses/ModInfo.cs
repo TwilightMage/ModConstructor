@@ -70,17 +70,17 @@ namespace ModConstructor.ModClasses
 
         MainWindow window;
 
-        public Property<StringValue> name             { get; } = new Property<StringValue>(     nameof(name),          typeof(ModInfo), () => "",                                   true);
+        public SingleProperty<StringValue> name             { get; } = new SingleProperty<StringValue>(     nameof(name),          typeof(ModInfo), () => "",                                   true);
                                                                                                                                                                                    
         public PropertyList<StringValue> authors      { get; } = new PropertyList<StringValue>( nameof(authors),       typeof(ModInfo), () => "",                                   true);
-        public Property<StringValue> version          { get; } = new Property<StringValue>(     nameof(version),       typeof(ModInfo), () => (new Version(0, 0, 0, 1)).ToString(), true);
-        public Property<StringValue> displayName      { get; } = new Property<StringValue>(     nameof(displayName),   typeof(ModInfo), () => "",                                   true);
-        public Property<StringValue> homePage         { get; } = new Property<StringValue>(     nameof(homePage),      typeof(ModInfo), () => "",                                   true);
-        public Property<BooleanValue> hideCode        { get; } = new Property<BooleanValue>(    nameof(hideCode),      typeof(ModInfo), () => true,                                 true);
-        public Property<BooleanValue> hideResources   { get; } = new Property<BooleanValue>(    nameof(hideResources), typeof(ModInfo), () => true,                                 true);
-        public Property<BooleanValue> includeSource   { get; } = new Property<BooleanValue>(    nameof(includeSource), typeof(ModInfo), () => false,                                true);
+        public SingleProperty<StringValue> version          { get; } = new SingleProperty<StringValue>(     nameof(version),       typeof(ModInfo), () => (new Version(0, 0, 0, 1)).ToString(), true);
+        public SingleProperty<StringValue> displayName      { get; } = new SingleProperty<StringValue>(     nameof(displayName),   typeof(ModInfo), () => "",                                   true);
+        public SingleProperty<StringValue> homePage         { get; } = new SingleProperty<StringValue>(     nameof(homePage),      typeof(ModInfo), () => "",                                   true);
+        public SingleProperty<BooleanValue> hideCode        { get; } = new SingleProperty<BooleanValue>(    nameof(hideCode),      typeof(ModInfo), () => true,                                 true);
+        public SingleProperty<BooleanValue> hideResources   { get; } = new SingleProperty<BooleanValue>(    nameof(hideResources), typeof(ModInfo), () => true,                                 true);
+        public SingleProperty<BooleanValue> includeSource   { get; } = new SingleProperty<BooleanValue>(    nameof(includeSource), typeof(ModInfo), () => false,                                true);
         public PropertyList<StringValue> buildIgnores { get; } = new PropertyList<StringValue>( nameof(buildIgnores),  typeof(ModInfo), () => "",                                   true);
-        public Property<StringValue> description      { get; } = new Property<StringValue>(     nameof(description),   typeof(ModInfo), () => new StringValue("", true),            true);
+        public SingleProperty<StringValue> description      { get; } = new SingleProperty<StringValue>(     nameof(description),   typeof(ModInfo), () => new StringValue("", true),            true);
                                                                                                                                                                                    
         public PropertyList<Item> items               { get; } = new PropertyList<Item>(        nameof(items),         typeof(ModInfo), () => new Item(),                           true);
 

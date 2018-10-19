@@ -6,21 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ModConstructor.ModClasses.Values
+namespace ModConstructor.ModClasses.Values.SimpleValues
 {
-    public class NumberValue : SimpleValue<int>, INumber
+    public sealed class BooleanValue : SimpleValue<bool>
     {
-        public NumberValue(int f) : base(f)
+        public BooleanValue() : base()
         {
 
         }
 
-        public NumberValue() : base (0)
+        public BooleanValue(bool value) : base(value)
         {
 
         }
 
-        public int AsNumber()
+        public override bool AsBoolean()
         {
             return value;
         }

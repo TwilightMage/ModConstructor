@@ -8,13 +8,17 @@ using System.Xml.Linq;
 
 namespace ModConstructor.ModClasses.Values
 {
+    public delegate void ChangedEventHandler<T>(T before, T now);
+    public delegate void ChangedEventHandler();
+
     public abstract class Value
     {
         public event PropertyChangedEventHandler PropertyChanged;
         public event ChangedEventHandler Changed;
         
-        public IProperty property { get; set; }
-        public string where => property.whereAmI(this);
+        public Property property { get; set; }
+        public string where => property.WhereAmI(this);
+        public bool initialized { get; protected set; }
 
         protected string _error = "";
         public string error
@@ -41,6 +45,8 @@ namespace ModConstructor.ModClasses.Values
         }
 
         public bool hasError => !String.IsNullOrWhiteSpace(error);
+
+        public abstract bool changed { get; }
 
         protected bool _dirty = false;
         public bool dirty
@@ -80,10 +86,16 @@ namespace ModConstructor.ModClasses.Values
 
         }
 
-        public virtual void Initialize(IProperty property)
+        public virtual void Initialize(Property property)
         {
             this.property = property;
+            initialized = true;
         }
+
+        public virtual string AsString() => "";
+        public virtual int AsNumber() => 0;
+        public virtual float AsFloat() => 0;
+        public virtual bool AsBoolean() => false;
 
         public abstract XObject Pack(string name);
 

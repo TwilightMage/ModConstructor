@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ModConstructor.ModClasses.Values.SimpleValues;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -6,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace ModConstructor.ModClasses.Values
+namespace ModConstructor.ModClasses.Values.ComplexValues
 {
-    public class StringValueLocalizable : ValueObject, IString
+    public class StringValueLocalizable : ComplexValue, IString
     {
         public enum Language
         {
@@ -51,15 +52,15 @@ namespace ModConstructor.ModClasses.Values
             }
         }
 
-        public Property<StringValue> En { get; } = new Property<StringValue>(nameof(En), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> De { get; } = new Property<StringValue>(nameof(De), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> It { get; } = new Property<StringValue>(nameof(It), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> Fr { get; } = new Property<StringValue>(nameof(Fr), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> Es { get; } = new Property<StringValue>(nameof(Es), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> Ru { get; } = new Property<StringValue>(nameof(Ru), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> Ch { get; } = new Property<StringValue>(nameof(Ch), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> Br { get; } = new Property<StringValue>(nameof(Br), typeof(StringValueLocalizable), () => "", true);
-        public Property<StringValue> Po { get; } = new Property<StringValue>(nameof(Po), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> En { get; } = new SingleProperty<StringValue>(nameof(En), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> De { get; } = new SingleProperty<StringValue>(nameof(De), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> It { get; } = new SingleProperty<StringValue>(nameof(It), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> Fr { get; } = new SingleProperty<StringValue>(nameof(Fr), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> Es { get; } = new SingleProperty<StringValue>(nameof(Es), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> Ru { get; } = new SingleProperty<StringValue>(nameof(Ru), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> Ch { get; } = new SingleProperty<StringValue>(nameof(Ch), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> Br { get; } = new SingleProperty<StringValue>(nameof(Br), typeof(StringValueLocalizable), () => "", true);
+        public SingleProperty<StringValue> Po { get; } = new SingleProperty<StringValue>(nameof(Po), typeof(StringValueLocalizable), () => "", true);
 
         public string FromLanguage(Language lang)
         {
